@@ -1,6 +1,6 @@
 # LEGIS — Technical Stack
 
-*Documented: 2026-05-01 — Updated: 2026-05-16 (session 2)*
+*Documented: 2026-05-01 — Updated: 2026-05-22 (session 5)*
 
 ---
 
@@ -39,7 +39,7 @@
 - **Multi-role:** `User.roles Role[]` (PostgreSQL array) — a user may hold multiple roles simultaneously; all role checks use `.some()` / `.includes()` against the array; JWT and session carry `roles: Role[]`
 - **Session staleness:** JWT tokens are cached for the session lifetime; role changes (e.g. granting ADMIN) do not take effect until the affected user signs out and back in
 - `BillSeniorDeputy` table removed — Sr. Deputies assigned exclusively by APOC via `BillApprovalPath.srDeputyId`; Sr. Deputy access derived from `ApprovalDecision` rows
-- Full org hierarchy: `Administration → Bureau → Division → Section`; users may be assigned to any single level; `User.sectionId` is nullable (Section is optional for all users)
+- Full org hierarchy: `Administration → Bureau → Division → Section`; users may be assigned to any single level; `User.sectionId` is nullable (Section is optional for all users); Section has `divisionId` (normal path) OR `bureauId` (directly under a bureau with no intermediate division); Division has `bureauId: null` for standalone divisions (e.g. Legislative Affairs reports to COO, not a bureau)
 - Access scoping enforced in Server Actions (LA roles see all; SME/approver roles see only assigned bills)
 - Use Neon's pooled connection string in production; dev branch URL in `.env.local`
 - Migrations run at deploy time: `npx prisma migrate deploy` in `railway.json` start command
