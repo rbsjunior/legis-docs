@@ -1,0 +1,326 @@
+# LEGIS — Legislative Affairs Bill Review System - test
+## Requirements Document
+*Updated: 5/16/26 (session 2)*
+
+---
+
+## Organizational Structure
+
+```
+Department
+├── Administrations  (each headed by a Sr. Deputy Director)
+│   └── Bureaus → Divisions → Sections
+└── Standalone Bureaus / Divisions  (no Sr. Deputy Director above them)
+```
+
+**Top-level Executives:** Director, COO, CAO, Health Services Director, Chief Medical Executive
+
+---
+
+## User Roles
+
+| Role | Code | Division | Purpose |
+|------|------|----------|---------|
+| Administrator | `ADMIN` | Legislative Affairs | System administration and emergency overrides |
+| Legislative Affairs Initiator | `LAI` | Legislative Affairs | Create and initiate bill analyses |
+| Administrative Point of Contact | `APOC` | Legislative Affairs | Coordinate bill analysis and review per bill |
+| Legislative Affairs Contact | `LA_CONTACT` | Legislative Affairs | First-level approval |
+| Subject Matter Expert | `SME` | Any Bureau / Division / Administration | Provide expert analysis and review |
+| Senior Deputy Director | `SENIOR_DEPUTY` | Administration | Administration-level approval and/or SME feedback |
+| Chief Operating Officer | `COO` | Executive | Required approver on all analyses |
+| Director | `DIRECTOR` | Executive | Final approval authority — required on all analyses |
+| CAO | `CAO` | Executive | Executive approval — required in some cases |
+| Health Services Director | `HSD` | Executive | Executive approval — required in some cases |
+| Chief Medical Executive | `CME` | Executive | Executive approval — required in some cases |
+| Proxy Approver | `PROXY_APPROVER` | Any | Temporary approval authority in absence of primary approver |
+
+**Legislative Affairs division roles** (`ADMIN`, `LAI`, `APOC`, `LA_CONTACT`) have full read and edit access to all bill records. All other roles have scoped access limited to bills they are assigned to (to be refined).
+
+**Multi-role support:** A user may hold multiple roles simultaneously (e.g. `LAI` + `APOC`). Access rights are the union of all held roles.
+
+---
+
+## Approval Path Logic
+
+All analyses require **COO** and **Director** approval. `CAO`, `HSD`, and `CME` are required in some cases (configurable per bill). All approver roles may provide substantive feedback in addition to their approval decision.
+
+| Scenario | Approval Path |
+|---|---|
+| SME in an Administration | SME → Sr. Deputy Director → COO → Director |
+| SME in a standalone Bureau or Division | SME → COO → Director |
+| Sr. Deputy acts as SME (no separate SME review) | Sr. Deputy Director → COO → Director |
+
+- A bill may involve **zero or more Administrations** and **zero or more standalone Bureaus/Divisions**.
+- Multiple Administration paths run **in parallel**, converging at COO.
+
+```
+[Admin A SMEs]  → Sr. Deputy A ─┐
+[Admin B — Sr. Deputy only] ────┼──→ COO → Director
+[Standalone Bureau SMEs] ───────┘
+```
+
+---
+
+## Full Workflow
+
+**START — Trigger:** Legislative Proposal needs MDHHS analysis.
+
+### Step 1 — LAI Creates and Submits Analysis Record
+1. **LAI** creates an analysis record and assigns: APOC, LA Contact.
+2. **LAI** submits the analysis record.
+3. *(Auto-email)* Notifies: APOC, LA Contact.
+
+### Step 2 — APOC Facilitates Administration Review
+4. **APOC** accesses record and views details.
+5. **APOC** assigns SMEs and Senior Deputies for the record.
+6. **APOC** facilitates administration review and content contribution.
+7. **APOC** ensures bill analysis is agreed on by administration SMEs.
+8. **APOC** creates the approval path, assigning SMEs and Senior Deputies per parallel path.
+9. *(Auto-email)* Notifies: APOC, LAI.
+
+### Step 3 — Administration Review Completion & LAI Review
+10. Administration review confirmed complete.
+11. **APOC** triggers automated message to LAI.
+12. *(Auto-email)* Notifies: APOC, LAI.
+13. **LAI** reviews the analysis.
+14. Executive Approvers and Proxies added to approval path.
+
+### Step 4 — LAI Approval & Executive Approval Chain
+15. **LAI** approves the analysis.
+16. *(Auto-email)* Sends routing sheet to Legislative Affairs Manager.
+17. **[PA]** **COO** reviews and approves.
+18. **[PA]** **MDHHS Director** approves.
+
+### Step 5 — Final Notification & Artifact Distribution
+19. *(Auto-email)* Sends to **LAI**: Bill #, Sponsor, Topic, Recommended Position, link to record.
+20. **LAI** clicks **"Email Artifacts"** button.
+21. *(Auto-email)* Sends: PDF bill analysis, PDF routing sheet, Bill Analysis details.
+
+**FINISH**
+
+*[PA] = action can be completed by a Proxy Approver*
+
+---
+
+## Auto-Generated Emails
+
+| Trigger | Recipients | Contents |
+|---------|-----------|---------|
+| LAI submits record | APOC, LA Contact | Record notification |
+| APOC creates approval path | APOC, LAI | Approval path created |
+| APOC triggers message to LAI | APOC, LAI | Review complete notification |
+| LAI approves | Legislative Affairs Manager | Routing sheet |
+| Director approves | LAI | Bill #, Sponsor, Topic, Recommended Position |
+| LAI clicks "Email Artifacts" | TBD | PDF analysis, PDF routing sheet, Bill Analysis details |
+
+---
+
+## Bill Analysis Record
+
+*Source: OHS Bill Analysis/Enrolled Bill Analysis Template (doc-page-1 through doc-page-4)*
+
+**One bill per record.** Related bills are linked via the Related Bill Numbers field.
+
+### Editing and Collaboration Rules
+
+- **Section 1** locked after creation — LAI/APOC only.
+- **Sections 2–12** editable by assigned stakeholders in fields relevant to their role.
+- **Collaborative fields** — multiple stakeholders may contribute to the same text area; contributions are attributed (who/when); APOC or LAI consolidates.
+- **Concurrent editing** — simultaneous updates permitted; last write wins.
+- **Approval invalidation** — any edit after an approval is expressed automatically voids that approval; approver must re-approve.
+- **Executive lock** — once LAI submits for executive approval, record is read-only for all except `COO`, `DIRECTOR`, `CAO`, `HSD`, `CME`.
+- Audit trail captures all edits by all users with timestamps.
+
+### Previous Department Review Reference
+
+When a bill that was previously reviewed by the Department returns in a new or amended form, the new analysis record may be linked to the prior review. This provides continuity of institutional knowledge and avoids duplicating work already done.
+
+**Linking:**
+- A new bill analysis record may reference one prior LEGIS bill analysis record (the "previous review").
+- The link is set at creation time or any point during drafting by the LAI.
+- The referenced record does not need to be for the same bill number — it may point to a prior-session version, a predecessor bill, or a substantially similar bill.
+
+**Clone from previous review:**
+- LAI may trigger a "Copy from previous review" action that pre-populates selected sections of the new record with content from the referenced prior review.
+- Sections eligible for cloning (LAI selects which to copy): Summary, Intent of Legislation, Lead Agency Position, Position Details, Suggested Changes, Fiscal Impact, Background, Stakeholder Positions.
+- Cloned content is treated as a starting draft — fully editable; the copy action does not lock or link the fields.
+- Section 1 (Header) and all system/workflow fields are never cloned.
+- The clone action can only be performed once per record; a confirmation prompt is shown before overwriting any existing content.
+
+**Review history comparison:**
+- On any bill analysis record that has a previous review linked, a "View Prior Review" panel or link is available to all users with record access.
+- The panel shows the prior record's key fields (Bill Number, Topic, Lead Agency Position, Summary, date of review) side by side with the current record for quick reference.
+- Full navigation to the prior record is available via a link.
+- If the prior record itself has a previous review linked, the full chain is traversable (each record links to its predecessor), enabling a complete history of Department reviews for a recurring bill.
+
+---
+
+### Bill Document Attachments
+
+Each bill analysis record supports one or more attached bill documents. PDF is the most common format; multiple documents may be attached to accommodate amendments, substitutes, or companion bills.
+
+| Attribute | Detail |
+|-----------|--------|
+| Primary document | Typically one PDF; displayed prominently on the record |
+| Additional documents | Flexible — any number of supplementary files allowed |
+| Accepted formats | PDF (primary), HTML, plain text, Markdown, XML |
+| Upload method | File upload (stored in Railway Storage) and/or public URL — both optional, but at least one is required per document entry |
+| Public URL | Each document entry has an optional public URL field (e.g. Michigan Legislature website link); stored alongside the uploaded file |
+| Storage | Railway Storage (S3-compatible) via AWS SDK v3 for uploaded files |
+| Access | Any user with access to the bill record can view attached documents |
+| Management | LAI and APOC may add or remove documents at any workflow stage prior to executive lock |
+
+**Document list display:** Each attached document shows label/filename, upload date, uploader name, and links for download (if file uploaded) and/or open URL (if URL provided).
+
+**Bill draft comparison:** Documents are passed to a third-party comparison tool by URL. When two or more documents are present on the record, the system constructs a comparison link using their public URLs — either the user-supplied public URL or the Railway Storage download URL for uploaded files. The comparison tool is loaded in-app (e.g. new tab or embedded iframe — integration details TBD).
+
+**AI-assisted comparison *(low priority / future)*:** A future evolution will use a generative AI tool to compare two versions of a bill and produce a plain-language synopsis of the changes (e.g. "Section 3 removes the appropriation; Section 7 adds a new reporting requirement"). This will be surfaced as an optional "Summarize Changes" action alongside the existing comparison link. Implementation details TBD — depends on third-party comparison tool maturity and LLM API selection.
+
+### Mid-Workflow Bill Changes
+
+If the bill is amended or substituted while department analysis is in progress, the LAI must be able to record the change without restarting the workflow.
+
+**LAI actions when a bill changes:**
+1. Upload the updated bill document (attached to the record alongside prior versions — old versions are retained for audit purposes, not deleted).
+2. Enter a required comment describing what changed and why (e.g. "Substitute bill introduced 5/20 — Section 3 revised to remove appropriation language").
+
+**System behavior on bill change:**
+- The new document becomes the current primary bill document; prior versions are demoted and remain visible in the document history.
+- The comment is recorded as a **bill change notice** — displayed prominently on the record and visible to all users with record access.
+- All active approvals (any `APPROVED` decisions not yet `VOIDED`) are automatically voided, requiring re-approval, consistent with the existing approval invalidation rule.
+- *(Auto-email — TBD)* Notify APOC, assigned SMEs, and Sr. Deputies that the bill has changed and approvals have been reset.
+
+**Constraints:**
+- Only LAI may record a bill change notice.
+- Available at any workflow stage up to and including `LAI_REVIEW`. Not available once status reaches `EXECUTIVE_REVIEW` or later — at that point the LAI must contact an ADMIN for an override.
+- Comment is required; upload of a new document is strongly recommended but not enforced (edge case: bill text changes but document is not yet available).
+
+---
+
+### Section 1: Header & Basic Information *(locked after creation)*
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| Date | Date | Yes | Date analysis was initiated |
+| Bill Number | String | Yes | Single bill, e.g. "HB 9999" |
+| Topic / Title | String | Yes | Brief descriptive title |
+| Sponsors | Text | No | e.g. "Representatives X and Y" |
+| Bipartisan Support | Boolean | No | Yes / No |
+| Committee | String | No | e.g. "House Health Policy" |
+| Analysis Done By | String | Yes | Bureau and analyst name |
+| Date of Analysis / Update | Date | Yes | When analysis was last updated |
+| Reviewed By | List | No | Name + Department per reviewer |
+| Related Bill Numbers | String | No | Links to other related bill records |
+| Previous Review Reference | FK → BillAnalysis | No | Link to a prior LEGIS analysis record for the same or predecessor bill; enables clone and history comparison |
+
+### Section 2: Intent of Legislation
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| Re-introduction? | Boolean | No | Yes / No |
+| Previous Bill Number | String | Conditional | Required if Re-introduction = Yes |
+| Intent of Legislation | Rich Text | Yes | Detailed description of bill intent |
+
+### Section 3: Summary
+
+| Field | Type | Required |
+|-------|------|----------|
+| Summary | Rich Text | Yes |
+
+### Section 4: Lead Agency Position
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| Lead Agency Position | Enum | Yes | SUPPORT / OPPOSE / OPPOSE_AS_WRITTEN / SUPPORT_AS_WRITTEN / NEUTRAL |
+| Position Details | Rich Text | Yes | Detailed explanation |
+| Other Departments Consulted | Text | No | Other state departments consulted |
+
+### Section 5: Suggested Changes
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| Suggested Changes | Rich Text | No | Narrative description of proposed amendments |
+| Suggested Changes Details | Structured | No | Per change: page, line, strike/add instruction, explanation |
+
+### Section 6: Fiscal / Economic Impact
+
+| Level | Field | Type |
+|-------|-------|------|
+| Department | Budgetary | Rich Text |
+| Department | Comments | Rich Text |
+| State | Budgetary | Rich Text |
+| Local Government & Tribes | Budgetary / Revenue | Rich Text |
+| Summary | Fiscal Impact Amount | Decimal |
+| Summary | Fiscal Impact Timeline | String |
+
+### Section 7: Significant Changes from Introduction to Enrollment
+
+| Field | Type | Required |
+|-------|------|----------|
+| Significant Changes | Rich Text | No |
+
+### Section 8: Summary of Arguments
+
+| Field | Type | Required |
+|-------|------|----------|
+| Pro Arguments | Rich Text | No |
+| Con Arguments | Rich Text | No |
+
+### Section 9: Stakeholder Positions
+
+| Field | Type | Required |
+|-------|------|----------|
+| Stakeholder Positions | Rich Text | No |
+
+### Section 10: Background
+
+| Field | Type | Required |
+|-------|------|----------|
+| Background | Rich Text | No |
+| Problem Being Addressed | Rich Text | No |
+
+### Section 11: Executive Power / Legal Policy Checklist
+
+*If any item = Yes: provide citation and notify legal.*
+
+| Field | Type |
+|-------|------|
+| Limitations on department rulemaking authority? | Boolean |
+| Provisions relating to executive power (removal, clemency, appointments, emergency management)? | Boolean |
+| Limitations on who the governor can appoint? | Boolean |
+| Any new advisory bodies within the executive branch? | Boolean |
+| Does the bill overrule or codify a court decision or agency determination? | Boolean |
+| Limitations that limit access to courts or other remedies? | Boolean |
+| Local government considerations? | Boolean |
+| Legal Citation | Text |
+| Legal Contacted | Boolean |
+
+### Section 12: Post-Enrollment *(shown only after bill is enrolled)*
+
+| Field | Type |
+|-------|------|
+| Vote Summary — Senate | Text |
+| Vote Summary — House | Text |
+| Administrative Rules Impact | Rich Text |
+| Technical / Tie-bar / Signing Issues | Rich Text |
+| Director's Signature | String |
+| Director Signature Date | Date |
+
+### Section 13: Workflow Review Fields
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| Fin Ops Review | Rich Text | No | Financial Operations input during SME review stage |
+
+### Section 14: System Fields
+
+| Field | Type | Notes |
+|-------|------|-------|
+| Record ID | CUID | Auto-generated primary key |
+| Created By | FK → User | LAI who initiated |
+| Created At | DateTime | Auto-generated |
+| Updated At | DateTime | Auto-updated on save |
+| Last Modified By | FK → User | Last editor |
+| Draft Status | Enum | DRAFT / SUBMITTED |
+| Completion % | Integer | 0–100, system-calculated |
+| Priority | Enum | NORMAL / URGENT |
