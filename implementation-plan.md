@@ -1,6 +1,6 @@
 # LEGIS — Implementation Plan
 
-*Documented: 2026-05-01 — Last updated: 2026-05-21 (session 3)*
+*Documented: 2026-05-01 — Last updated: 2026-05-22 (session 4)*
 
 ---
 
@@ -49,8 +49,8 @@
 
 ---
 
-### Phase 3 — Workflow & Approval Engine
-*Core engine complete 2026-05-16; gates + Sr. Deputy edit fix 2026-05-21*
+### Phase 3 — Workflow & Approval Engine ✅
+*Core engine complete 2026-05-16; gates + Sr. Deputy edit fix 2026-05-21; proxy + exec selection + mid-workflow changes complete 2026-05-22*
 
 **Completed:**
 - [x] `WorkflowStatus` state machine — DRAFT → SUBMITTED → SME_REVIEW → LAI_REVIEW → EXECUTIVE_REVIEW → APPROVED → ENROLLED; all transitions server-validated by role + current status
@@ -81,11 +81,9 @@
 - [x] Conditional approver ordering gate — `recordDecision` blocks APPROVE for `COO` until all required conditional approvers (CAO/HSD/CME per bill flags) have non-voided APPROVED decisions
 - [x] COO → Director serial gate — `recordDecision` blocks APPROVE for `DIRECTOR` until the non-voided COO decision is APPROVED
 - [x] Sr. Deputy bill edit access — `editable` flag in `app/(app)/bills/[id]/page.tsx` now includes `bill.approvalPaths.some(p => p.srDeputy?.id === userId)`; previously Sr. Deputies were always non-editable because they are assigned via `BillApprovalPath.srDeputyId`, not as `BillSme` rows
-
-**Pending:**
-- [ ] Proxy approver assignment — UI to designate a `PROXY_APPROVER` user for a given approver role on a specific bill
-- [ ] Executive approver selection decoupled from LAI approval — v4 workflow (and requirements step 14) require exec approvers to be selected during `LAI_REVIEW` as a distinct step before the LAI approval action; currently `laiApprove` atomically creates exec decisions and transitions status in one action; needs to be split into (a) an APOC/LAI-accessible form to confirm exec approvers during `LAI_REVIEW` and (b) a separate LAI approve action that transitions to `EXECUTIVE_REVIEW`
-- [ ] Mid-workflow bill changes — LAI uploads an updated bill document (old versions retained) and enters a required comment describing the change; system promotes new doc to current primary, records a prominent "bill change notice" visible to all users with record access, voids all active non-voided `APPROVED` decisions (consistent with existing approval invalidation), and sends auto-email to APOC/assigned SMEs/Sr. Deputies; available only up to and including `LAI_REVIEW` — LAI must contact ADMIN for an override once status reaches `EXECUTIVE_REVIEW` or later; upload is strongly recommended but not required (comment is required)
+- [x] Executive approver selection decoupled from LAI approval — `setExecApprovers` Server Action + `ExecApproverSelector` client component (`app/(app)/bills/[id]/_components/ExecApproverSelector.tsx`); APOC or LAI selects individual exec approvers and conditional flags (CAO/HSD/CME) during `LAI_REVIEW` as a distinct step; `laiApprove` validates selections are present before transitioning to `EXECUTIVE_REVIEW`
+- [x] Proxy approver assignment — `BillProxyAssignment` model; `assignProxy` / `removeProxy` Server Actions; `ProxyAssignmentPanel` client component; APOC or LAI assigns a `PROXY_APPROVER` user to act on behalf of any pending approver on a specific bill; `recordDecision` updated to allow proxy submission and record `proxyApproverId` on the decision
+- [x] Mid-workflow bill changes — `BillChangeNotice` model; `recordBillChange` Server Action; `BillChangeNoticeForm` client component; LAI records a required comment (≥10 chars) when bill text changes; all active non-voided `APPROVED` decisions are voided and replaced with fresh `PENDING` rows; change notices displayed as amber banner in `WorkflowPanel`; available up to and including `LAI_REVIEW`; auto-email to APOC/SMEs/Sr. Deputies is deferred to Phase 5
 
 **Workflow ordering summary (from legis_workflow_v4.svg):**
 
@@ -113,11 +111,13 @@ Sr. Deputy Director  — approves last for their path
 
 ### Phase 4 — Collaboration & Audit
 
-- Attributed contributions on collaborative rich text fields (TipTap custom extension: who/when per contribution block)
-- Audit trail: all field writes logged with user + timestamp
-- Completion % calculation (system-calculated from required field fill rate)
+- **TipTap rich text editor** — replace all plain `<textarea>` fields across Sections 2–13 with TipTap; affects 10+ Rich Text fields; store content as JSON (TipTap ProseMirror format) or HTML; migrate existing plain-text values on first save
+- **Collaborative field attribution** — TipTap custom extension: per-contribution who/when attribution; multiple stakeholders may contribute to the same field; APOC or LAI consolidates; attribution metadata stored alongside content (not a separate table — embedded in TipTap document JSON)
+- **Audit trail** — `AuditLog` model required (does not yet exist in schema); log every field write with: `billAnalysisId`, `userId`, `field` (string), `oldValue`, `newValue`, `editedAt`; note: the existing `voidedAt` pattern on `ApprovalDecision` is approval history only, not a general audit trail; `lastModifiedById` on `BillAnalysis` is last-editor only, not a history
+- **`updateBill` access guard** — security gap: the `updateBill` Server Action (`app/actions/bills.ts`) validates workflow status and exec lock but does NOT verify the calling user is actually assigned to the bill; any authenticated user who knows a bill ID can POST edits; fix: load the bill with assignment fields and reject if user is not LAI, APOC, LA Contact, assigned SME, or Sr. Deputy on an approval path
+- **Completion % calculation** — system-calculated from required field fill rate; currently hardcoded to `0` on all records
 - **Previous Department Review Reference** — FK on `BillAnalysis` pointing to a prior LEGIS record (same or predecessor bill); set by LAI at creation or any time during drafting:
-  - Schema: `previousReviewId String? @db.VarChar` FK → `BillAnalysis.id`; self-relation; add to Section 1 header
+  - Schema: `previousReviewId String?` FK → `BillAnalysis.id`; self-relation; display in Section 1 header (currently missing from schema and UI)
   - Clone action — LAI triggers "Copy from previous review" to pre-populate selected sections (Summary, Intent, Lead Agency Position, Position Details, Suggested Changes, Fiscal Impact, Background, Stakeholder Positions) from the referenced record; cloned content is a plain editable draft; Section 1 and system/workflow fields are never cloned; can only be performed once per record; confirmation prompt required before overwriting existing content
   - "View Prior Review" panel — shown on any record that has a previous review linked; side-by-side comparison of key fields (Bill Number, Topic, Lead Agency Position, Summary, date); link to navigate to the prior record; full chain traversable if the prior record itself has a previous review
 
@@ -160,9 +160,11 @@ Sr. Deputy Director  — approves last for their path
 ### Phase 7 — Polish
 
 - ~~Admin UI: user management, role assignment, org structure management~~ — completed in Phase 3
+- ~~Section 12 conditional display (post-enrollment only)~~ — completed in Phase 2
+- **Dashboard** — currently a stub (shows username + roles only); build: bills awaiting the current user's action (pending decisions, awaiting APOC path setup, awaiting LAI review), counts by workflow status, recent activity
 - Emergency override controls (ADMIN role)
 - Bill list: search, filter by status / priority / assignee
-- Section 12 conditional display (post-enrollment only)
+- **Section 1 Priority field display** — minor bug: `Section1.tsx` line 35 hardcodes `—` for Priority; should read `bill.priority` (field exists in schema and is set at creation)
 - Accessibility and responsive pass
 
 ---
@@ -170,19 +172,19 @@ Sr. Deputy Director  — approves last for their path
 ## Sequencing
 
 ```
-Phase 1 → Phase 2 → Phase 3 (finish gates + mid-workflow bill changes)
+Phase 1 ✅ → Phase 2 ✅ → Phase 3 ✅
                                     ↓
-                              Phase 4 (TipTap + audit + previous review reference)
+                              Phase 4 (TipTap + audit trail + access guard + previous review reference)
                                     ↓
                               Phase 5 (email notifications)
                                     ↓
                               Phase 6 (file attachments + PDF)
                                     ↓
-                              Phase 7 (polish)
+                              Phase 7 (polish + dashboard + minor bugs)
 ```
 
 Phases 5 and 6 can begin in parallel once Phase 4 is stable — email requires workflow events; PDF/file upload requires form data; neither blocks the other.
 
-**Phase 3 completion order:** implement the three `recordDecision` ordering gates first (all in one file, well-specified), then decouple executive approver selection from `laiApprove`, then mid-workflow bill changes (touches approval invalidation already built), then proxy approver assignment.
+**Phase 4 recommended order:** fix `updateBill` access guard first (security), then TipTap integration (touches all sections — do before audit trail so log captures rich text format from the start), then audit trail schema + logging, then completion %, then previous review reference (needs schema migration).
 
 > **Key recommendation:** Spend extra design time on the approval path schema in Phase 2 before writing any Phase 3 UI. A wrong data model at that layer is expensive to unwind.

@@ -1,0 +1,438 @@
+MICHIGAN DEPARTMENT OF HEALTH & HUMAN SERVICES (MDHHS)
+ORGANIZATIONAL CHART — OVERVIEW & TOP-LEVEL STRUCTURE
+Date: 02/05/2026 | Pages 1-8 of 395
+
+================================================================================
+DOCUMENT LEGEND (Page 1)
+================================================================================
+- Each box contains: Position Code | Employee Name | Classification | Home Unit (if applicable)
+- Bold font = change in department code, home unit, or unit name
+- Name followed by * = appears on more than one page
+- Many-to-one box = multiple employees share one position code/classification
+- Source system: HRMN payroll system (updated bi-monthly)
+
+================================================================================
+TOP-LEVEL HIERARCHY (Page 3)
+================================================================================
+
+Gretchen Whitmer — GOVERNOR
+  │
+  └── [A3000] DIRECTOR
+        Position ID: SPLAPTEEA69N
+        Name: Elizabeth Hertel*
+        │
+        ├── SEMA4A08N | Teri Sims | SEMA
+        ├── Michael DeRose | HR Director (dotted line / advisory)
+        │
+        ├── SPLAPTEEE85N | Thomas Stallworth | Senior Advisor & Consultant
+        ├── SPLAPTEEE47N | Vacant | Senior Advisor
+        ├── STOFCADMF27N | Emily Skrzypczak* | Chief of Staff
+        │
+        ├── [A3000] CHIEF OPERATING OFFICER (Ref: 1B)
+        │     Position ID: SPLAPTEEE34N
+        │     Name: David Knezek*
+        │
+        ├── [A3000] CHIEF ADMINISTRATIVE OFFICER (Ref: 1B)
+        │     Position ID: SENCHDEPA17N
+        │     Name: Jean Ingersoll*
+        │     Title: Senior Chief Deputy Director
+        │
+        ├── [A3000] CHIEF FOR HEALTH SERVICES (Ref: 1B)
+        │     Position ID: SENCHDEPA22N
+        │     Name: Meghan Hodge-Groen*
+        │     Title: Senior Chief Deputy Director
+        │
+        ├── [A3000] OFFICE OF CHIEF MEDICAL EXECUTIVE (Ref: 1B)
+        │     Position ID: SPLAPTEED19N
+        │     Name: Dr. Natasha Bagdasarian*
+        │     Title: Chief Medical Executive
+        │
+        ├── [T0000] OFFICE OF CULTURE, COMMUNITY, EDUCATION AND LEADERSHIP (Ref: 3MW)
+        │     Position ID: STOFCADME86N
+        │     Name: Kimberly Reese*
+        │     Title: State Office Admin.
+        │
+        ├── [U0000] OFFICE OF INSPECTOR GENERAL (Ref: 2ABB)
+        │     Position ID: SENDPDIRB20N
+        │     Name: Stacie Sampson*
+        │     Title: Senior Deputy Director
+        │
+        ├── [A3200] OFFICE OF RECIPIENT RIGHTS (Ref: 2AAB)
+        │     Position ID: STOFCADMA66N
+        │     Name: Raymie Postema*
+        │     Title: State Office Admin.
+        │
+        ├── [P1000] PUBLIC HEALTH ADMINISTRATION (Ref: 1K)
+        │     Position ID: SENDPDIRA72N
+        │     Name: Sarah Lyon-Callo*
+        │     Title: Senior Deputy Director
+        │
+        └── [C0000] MICHIGAN CHILDREN'S SERVICES ADMINISTRATION (Ref: 1H)
+              Position ID: SENDPDIRA90N
+              Name: Vacant* / Timothy Click (WOC)
+              Title: Senior Deputy Director of CSA
+
+
+================================================================================
+CHIEF OF STAFF BRANCH (Page 4)
+================================================================================
+
+[A3000] CHIEF OF STAFF
+  Position ID: STOFCADMF27N
+  Name: Emily Skrzypczak*
+  Ref: 1B
+  │
+  ├── TRIBAL GOVERNMENT SERVICES & POLICY
+  │     Position ID: STDDADM1U41N
+  │     Name: Isabelle Welsh
+  │     Title: State Admin. Manager
+  │     │
+  │     ├── DEPSPL2S09N | Vacant | Dept. Specialist
+  │     ├── DEPTALTET36Y | Chrystina Lightfoot | Dept. Analyst
+  │     └── DPTLTCHEZ55R | Mary Calcatera | Dept. Technician
+  │
+  └── SPECIAL PROJECTS
+        Position ID: STDDADM1T95N
+        Name: Houda Fawaz
+        Title: State Admin. Manager
+        │
+        ├── TBD | Vacant | Dept. Analyst
+        └── TBD | Vacant | Dept. Analyst
+
+[A3000] OFFICE OF CHIEF MEDICAL EXECUTIVE
+  Position ID: SPLAPTEED19N
+  Name: Dr. Natasha Bagdasarian*
+  Ref: 1B
+  │
+  ├── SEMA3B48N | Robin Gregory | SEMA
+  ├── DEPSPL2R22N | Katie Abraham | Dept. Specialist
+  │
+  ├── STASTADME10N | Jared Welehodsky | State Asst. Admin.
+  │     ├── DEPSPL2R22N | Katie Abraham | Dept. Specialist
+  │     └── DEPSPL2R79N | Vacant | Dept. Specialist
+  │
+  └── STATE MEDICAL EXECUTIVE
+        Position ID: PHYSICNAA57R
+        Name: Vacant
+        Title: Physician
+
+
+================================================================================
+CHIEF OPERATING OFFICER BRANCH (Page 5)
+================================================================================
+
+[A3000] CHIEF OPERATING OFFICER
+  Position ID: SPLAPTEEE34N
+  Name: David Knezek*
+  Ref: 1B
+  │
+  ├── SEMA3B55N | Jacqueline Boyd | SEMA
+  ├── STASTADMD27N | Vacant | State Asst. Admin.
+  ├── STASTADME49N | Vacant | State Asst. Admin.
+  ├── DPTLTCHAB26N | Jay DuBois-Jones | Dept. Technician
+  ├── DPTLTCHEE74N | Ashley Lyon | Dept. Technician
+  │
+  ├── CLIMATE & ENVIRONMENT POLICY ADVISOR
+  │     Position ID: STASTADME42N
+  │     Name: Thomas Zimnicki
+  │     Title: State Asst. Admin.
+  │
+  ├── [D1000] FINANCIAL OPERATIONS ADMINISTRATION (Ref: 1L)
+  │     Position ID: SENDPDIRB29N
+  │     Name: Amy Epkey*
+  │     Title: Senior Deputy Director
+  │
+  ├── [E9000] COMMUNICATIONS ADMINISTRATION (Ref: 1F)
+  │     Position ID: SENDPDIRB51N
+  │     Name: Laura Blodgett*
+  │     Title: Senior Deputy Director
+  │
+  ├── [FA000] ECONOMIC STABILITY ADMINISTRATION (Ref: 1N)
+  │     Position ID: SENDPDIRA62N
+  │     Name: Erin Frisch*
+  │     Title: Senior Deputy Director
+  │
+  ├── [Q0000] STRATEGIC INTEGRATION ADMINISTRATION (Ref: 1D)
+  │     Position ID: SENDPDIRB22N
+  │     Name: Sudhakar Ramaswamy*
+  │     Title: Senior Deputy Director
+  │
+  ├── [LG000] LEGISLATIVE AFFAIRS (Ref: 2AWG)
+  │     Position ID: STOFCADME75N
+  │     Name: Chardae Burton*
+  │     Title: State Office Admin.
+  │
+  └── [S1000] STATE HOSPITAL ADMINISTRATION (Ref: 1R)
+        Position ID: SENEXPSYA07N
+        Name: George Mellos*
+        Title: Senior Executive Psych Director
+
+
+================================================================================
+CHIEF ADMINISTRATIVE OFFICER BRANCH (Page 6)
+================================================================================
+
+[A3000] CHIEF ADMINISTRATIVE OFFICER
+  Position ID: SENCHDEPA17N
+  Name: Jean Ingersoll*
+  Title: Senior Chief Deputy Director
+  │
+  ├── SEMA3B89N | Sherida Aikins | SEMA
+  ├── STASTADME54N | Kimberly Baron | State Asst. Admin.
+  │
+  ├── [G0000] POLICY, PLANNING & OPERATIONAL SUPPORT (Ref: 1G)
+  │     Position ID: SENDPDIRB47N
+  │     Name: Elizabeth Nagel*
+  │     Title: Senior Deputy Director
+  │
+  ├── [L1000] LEGAL AFFAIRS ADMINISTRATION (Ref: 1E)
+  │     Position ID: SENDPDIRB21N
+  │     Name: Matthew Rick*
+  │     Title: Senior Deputy Director
+  │
+  ├── [P3000] BUREAU OF EMERGENCY PREPAREDNESS, EMS AND SYSTEMS OF CARE (Ref: 2DSK)
+  │     Position ID: BUREAADMC12N
+  │     Name: Jay Fiedler*
+  │     Title: State Bureau Admin.
+  │
+  ├── [CS100] BUREAU OF CHILD SUPPORT (Ref: not shown)
+  │     Position ID: BUREAADMA48N
+  │     Name: Vacant* / Monica Bowman (WOC)
+  │     Title: State Bureau Admin.
+  │
+  ├── [Y1000] BUREAU OF CHILDREN'S COORDINATED HEALTH POLICY AND SUPPORTS (Ref: 1S)
+  │     Position ID: BUREAADMC70N
+  │     Name: Patricia Neitman*
+  │     Title: State Bureau Admin.
+  │
+  └── [I1100] MICHIGAN DEVELOPMENTAL DISABILITIES COUNCIL EXECUTIVE DIRECTOR (Ref: 2BTP)
+        Position ID: STOFCADMA70N
+        Name: Yasmina Bouraoui*
+        Title: State Office Admin.
+
+
+================================================================================
+CHIEF FOR HEALTH SERVICES BRANCH (Page 7)
+================================================================================
+
+[A3000] CHIEF FOR HEALTH SERVICES
+  Position ID: SENCHDEPA22N
+  Name: Meghan Hodge-Groen
+  Title: Senior Chief Deputy Director 21
+  │
+  ├── SEMA3A21N | Denise Richards | SEMA
+  │
+  ├── [N0000] HEALTH SERVICES ADMINISTRATION (Ref: 2FVQ)
+  │     Position ID: SENDPDIRB58N
+  │     Name: Erin Emerson
+  │     Title: SDD 20
+  │
+  ├── [N0000] MEDICAID OPERATIONS (Ref: 2FVQ)
+  │     Position ID: SENDPDIRB57N
+  │     Name: Brian Keisling
+  │     Title: SDD 20
+  │
+  ├── [N1000] BUREAU OF AGING, COMMUNITY LIVING AND SUPPORTS (Ref: 2FFQ)
+  │     Position ID: BUREAADMB06N
+  │     Name: Scott Wamsley
+  │     Title: SBA 18
+  │
+  ├── [N2000] BUREAU OF SPECIALTY BEHAVIORAL HEALTH SERVICES (Ref: 2BSP)
+  │     Position ID: BUREAADMA33N
+  │     Name: Kristen Morningstar
+  │     Title: SBA 18
+  │
+  ├── [N3000] BUREAU OF MEDICAID CARE MANAGEMENT & CUSTOMER SERVICE (Ref: 2ECQ)
+  │     Position ID: BUREAADMC56N
+  │     Name: Penny Rutledge
+  │     Title: SBA 18
+  │
+  ├── [N0001] OFFICE OF MEDICAL AFFAIRS (Ref: 2DZQ)
+  │     Position ID: PHYSMGR3A07N
+  │     Name: Jed Miller
+  │     Title: Physician Mgr.
+  │
+  └── [N0100] OFFICE OF OVERSIGHT & PROGRAM COORDINATION (Ref: 3PZ)
+        Position ID: STOFCADMF42N
+        Name: Nicole Hudson
+        Title: SOA 17
+
+
+================================================================================
+OFFICE OF CULTURE, COMMUNITY, EDUCATION AND LEADERSHIP (T1000) (Page 8)
+================================================================================
+
+[T1000] OFFICE OF CULTURE, COMMUNITY, EDUCATION AND LEADERSHIP
+  Position ID: STOFCADME86N
+  Name: Kimberly Reese*
+  Title: State Office Admin.
+  Ref: 3MW
+  │
+  ├── EXCSECEI47N | Kara Hammond | Exec. Sec.
+  │
+  ├── [T1010] CCEL TRANSFORMATION, ENGAGEMENT AND COMMUNITY HEALTH SECTION (Ref: 3AW)
+  │     Position ID: STDDADM1G08N
+  │     Name: Yesenia Murillo
+  │     Title: SAM
+  │     │
+  │     ├── DEPSPL2E32N | Jacquetta Hinton | Departmental Specialist
+  │     ├── PBHCST2AA91R | Shronda Grigsby | Public Health Consultant
+  │     ├── DEPSPL2U66N | Vacant | Departmental Specialist
+  │     │
+  │     └── DEPTMGR2E38N | Sam Evalt | Dept. Manager
+  │           ├── DEPTALTAL55Y | Emma Schmidt | Dept. Analyst
+  │           ├── DEPTALTEU33Y | Ryki Swank / Jessica Ledesma | Dept. Analyst
+  │           ├── DEPTALTEU09Y | Spriha Sharma | Dept. Analyst
+  │           ├── DEPTALTEV71Y | Paola Nkwuzor | Dept. Analyst
+  │           └── DEPTALTEU39Y | Maria Militzer | Dept. Analyst
+  │
+  ├── [T1020] CCEL LEADERSHIP DEVELOPMENT SECTION (Ref: 3LN)
+  │     Position ID: STDDADM1M65N
+  │     Name: Daniel Surratt
+  │     Title: SAM
+  │     │
+  │     ├── HUMSPL2A79N | Ola Latimore | HR Developer Specialist
+  │     ├── GNOFASTAE13R | Pamela Fitzgerald | GOA
+  │     │
+  │     └── HUMRMGR2A30N | Eric Washburn | HR Manager
+  │           ├── HUMRDEVAC62N | Lisa Trimble | HR Developer
+  │           ├── HUMRDEVAB22N | Keva Clark | HR Developer
+  │           ├── HUMRDEVAD97N | Kathern Butler | HR Developer
+  │           ├── HUMRDEVAD75N | Anissa Emery | HR Developer
+  │           └── HUMRDEVAC75N | Monique Jackson | HR Developer
+  │
+  └── [T1030] CCEL ORGANIZATIONAL CHANGE, ENHANCEMENT AND DEVELOPMENT SECTION (Ref: 3NB)
+        Position ID: STDDADM1R32N
+        Name: Alicia Edwards
+        Title: SAM
+        │
+        ├── DEPTMGR2E01N | Mariah Martin | Dept. Manager
+        │     ├── DEPTALTEK39Y | Aija Turner | Dept. Analyst
+        │     ├── DEPTALTAD87Y | Ashley Morel | Dept. Analyst
+        │     └── DEPTALTAD85Y | Cassandra Fancher | Dept. Analyst
+        │
+        └── HUMRMGR2A31N | Linda Henderson | HR Manager
+              ├── HUMRDEVAD63N | Marnie DeBell | HR Developer
+              ├── HUMRDEVAD55N | Marcetta Johnson-Wood | HR Developer
+              └── HUMRDEVAC36N | Jazmine Williams | HR Developer
+
+
+================================================================================
+OFFICE OF HUMAN RESOURCES — Civil Service (Page 2)
+================================================================================
+
+OFFICE OF HUMAN RESOURCES (Civil Service)
+  Name: Michael DeRose
+  Title: Human Resources Director
+  Ref: 1C
+  │
+  ├── Cameron Allie | HR Analyst (direct to Director)
+  ├── Gloria Sanchez-Thomas | GOA (direct to Director)
+  │
+  ├── LABOR RELATIONS
+  │     ├── [Ref: 2EKC] Renee Shilling | SAM
+  │     │     ├── A3101 | Jimmy Waters | Departmental Specialist
+  │     │     ├── Ryan Stockwell | HR Specialist
+  │     │     ├── Whitney Brewton | HR Specialist
+  │     │     └── Tammie Brown | HR Specialist
+  │     │
+  │     ├── [Ref: 2ELC] Nathan Conley | SAM
+  │     │     ├── Jean Stacey | HR Specialist
+  │     │     ├── Gary Maxwell | HR Analyst
+  │     │     ├── LaRhonda Stallings | HR Specialist
+  │     │     ├── Christopher Sheely | HR Analyst
+  │     │     ├── Gregory Harris | HR Analyst
+  │     │     ├── Amy Cramer | HR Analyst
+  │     │     ├── Donnie Whitley | HR Specialist
+  │     │     ├── Michele Owens | HR Specialist
+  │     │     ├── Donna Pline | HR Analyst
+  │     │     ├── Tiffany Hazard | HR Analyst
+  │     │     ├── Avery Werth | HR Analyst
+  │     │     ├── Kaylinda Bellant | HR Tech
+  │     │     └── Isaac Henry | Student Assistant
+  │     │
+  │     ├── [Ref: 3AL] Walter Reuther Psych. Hospital
+  │     │     └── Robbin Cooper | HR Specialist
+  │     │
+  │     ├── [Ref: 3AM] (Walter Reuther / facility unit — partial text)
+  │     ├── [Ref: 3AN] (Psych. Hospital unit — partial text)
+  │     └── [Ref: 3AP] Ctr. For Forensic Psychiatry
+  │           └── Diane Montri | HR Specialist
+  │
+  ├── Classifications/Selections
+  │     ├── [Ref: 2AFC] Candace Ewing | SAM
+  │     │     ├── Liberty Irwin | HR Specialist (Ref: 3HP)
+  │     │     ├── Linda Song | HR Specialist
+  │     │     ├── Matthew Gordy | HR Specialist
+  │     │     ├── Shanika Dennis | HR Specialist
+  │     │     ├── Julie Kelly | HR Specialist
+  │     │     ├── Whitney Hengesbach | HR Specialist
+  │     │     ├── Hillary Platte | HR Specialist
+  │     │     ├── Emily Williams | HR Specialist
+  │     │     ├── Lora Williams | HR Specialist
+  │     │     ├── Tony Todaro | HR Analyst
+  │     │     └── Felishia Williams | HR Specialist
+  │     │
+  │     └── [Ref: 2ETC] SH&R — Shellie Budd | SAM
+  │           ├── Marylou Thelen | HR Analyst
+  │           ├── Andrew Manning | HR Specialist
+  │           ├── Mallory Smith | HR Specialist
+  │           ├── Candace Clay | HR Specialist
+  │           ├── Samantha Ruhl | HR Specialist
+  │           ├── Kelly Vohwinkle | HR Analyst
+  │           ├── Kylie Helmes | HR Tech
+  │           ├── Dorris Crandall | HR Specialist
+  │           ├── Theresa Sheets | HR Specialist
+  │           ├── Kearstyn Meyers | HR Specialist
+  │           ├── Emily Wood | HR Analyst
+  │           ├── Madison Berlingame | HR Specialist
+  │           └── Jamelyn Forist / Saige Slowinski / Natalie Thelen | Student Assistants
+  │
+  ├── Payroll/Transactions
+  │     └── [Ref: 2AEC] Tammy Szydlowski | SAM
+  │           ├── Francescia Takala | HR Analyst
+  │           ├── Sheila Brickner | HR Tech 10
+  │           ├── Nicole Armstrong | HR Analyst
+  │           ├── Leanne Bodell | HR Analyst
+  │           ├── Breah Quebbeman | HR Tech
+  │           ├── Mary Mattingly | HR Tech 10
+  │           ├── Felisha Paine | HR Tech 10
+  │           ├── Sarah Stone | HR Tech
+  │           ├── Marian Pearson | HR Tech
+  │           ├── Sarah Emigh | HR Tech
+  │           ├── Haley Smith | HR Tech
+  │           ├── Shannon Hampton | HR Tech
+  │           ├── Jonathon Huguelet | HR Tech
+  │           ├── Michael Skanes | HR Tech
+  │           ├── Jazmine Taylor | HR Tech 10
+  │           ├── Rena Decker | HR Tech
+  │           ├── Maegan Williams | HR Tech
+  │           ├── Val Cegers | HR Tech
+  │           └── Julia Valadez | HR Tech
+  │
+  └── OHR Front Office (Ref: 1C)
+        ├── Kelli Hower | HR Specialist
+        ├── Joyce Wetzel | HR Tech
+        ├── Taniya Singh | Student Assistant
+        ├── Joicen Spratling | Student Assistant
+        └── (Additional staff referenced but partially obscured in source)
+
+
+================================================================================
+NOTES
+================================================================================
+- * = Employee appears on more than one org chart page
+- WOC = Without Compensation (acting/interim role)
+- LTA = Limited Term Appointment
+- FRZ = Frozen position
+- TBD = Position not yet assigned a position code
+- SAM = State Administrative Manager
+- SBA = State Bureau Administrator
+- SDA = State Division Administrator
+- SOA = State Office Administrator
+- SDD = Senior Deputy Director
+- GOA = Government Operations Analyst (or similar)
+- SEMA = State Emergency Management Administrator (or role code)
+- Ref codes (1B, 1C, 1D, etc.) = cross-reference connectors to other pages
+- Pages 1–8 cover the legend, HR office, and top-level department structure
+- Remainder of chart (pages 9–395) expands each administration's sub-units

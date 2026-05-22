@@ -1,0 +1,142 @@
+DHHS POLICY, PLANNING & OPERATIONAL SUPPORT (G0000) - ORG CHART
+Date: 02/05/2026 | Pages 138-141 of 395
+
+================================================================================
+HIERARCHY
+================================================================================
+
+[A3000] CHIEF ADMINISTRATIVE OFFICER
+  Position ID: SENCHDEPA17N
+  Name: Jean Ingersoll
+  Title: Senior Chief Deputy Director
+  │
+  └── [G0000] POLICY, PLANNING & OPERATIONAL SUPPORT
+        Position ID: SENDPDIRB47N
+        Name: Elizabeth Nagel
+        Title: Senior Deputy Director
+        Ref: 1G
+        │
+        ├── G0000 | SEMA3B38N | Tania Rodriguez | SEMA
+        ├── STASTADMD32N | Vacant | State Asst. Admin.
+        ├── DEPSPL2O76N | Neila Johnson | Departmental Specialist
+        │
+        ├── [G4000] BUREAU OF POLICY & PLANNING
+        │     Position ID: BUREAADMC94N
+        │     Name: Ninah Sasy
+        │     Title: State Bureau Admin 18
+        │     Ref: 2AUG / 2FBB
+        │     │
+        │     ├── EXECSC1AD09N | Kristin Pline | Exec. Sect. 11
+        │     │
+        │     ├── [G2100] PPOS HEALTHCARE WORKFORCE DIVISION
+        │     │     Position ID: STDIVADMI45N
+        │     │     Name: Amber Myers
+        │     │     Title: State Division Admin 17
+        │     │     Ref: 2AUG
+        │     │     │
+        │     │     ├── DEPSPL2R46N | Brittany Brookshire | Departmental Specialist
+        │     │     │
+        │     │     ├── [G2410] WORKFORCE/ACCESS & GRANTS MANAGEMENT SECTION
+        │     │     │     Position ID: STDDADM1V20N
+        │     │     │     Name: Miguelina Carela-Garcia
+        │     │     │     Title: SAM
+        │     │     │     Ref: 3AZ
+        │     │     │     │
+        │     │     │     ├── DEPTALTEF52Y | Sarah Kleis | Dept. Analyst
+        │     │     │     ├── DEPTALTEE24Y | Megan Linton | Dept. Analyst
+        │     │     │     ├── DEPTALTEF53Y | Juliette Rousseau | Dept. Analyst
+        │     │     │     ├── DEPTALTEV40Y | Jillian Betzer | Dept. Analyst
+        │     │     │     └── DEPTALTEY18Y | Sharmin Salam | Dept. Analyst
+        │     │     │
+        │     │     └── [G2440] OFFICE OF NURSING PROGRAMS
+        │     │           Position ID: STDDADM1P09N
+        │     │           Name: Casey Klein
+        │     │           Title: SAM 15
+        │     │           │
+        │     │           └── DEPTALTEL88Y | Vacant | Departmental Analyst
+        │     │
+        │     └── [G4100] PPOS SDOH POLICY DIVISION
+        │           Position ID: STDIVADMI53N
+        │           Name: Oluwaseun Akinyemi
+        │           Title: State Division Admin 17
+        │           Ref: 3PY
+        │           │
+        │           ├── DEPSPL2M33N | Julia Grescowle | Departmental Specialist
+        │           ├── DEPTALTAO38Y | Danielle Lepar | Dept. Analyst
+        │           │
+        │           └── [G4120] SDOH STRATEGY SECTION
+        │                 Position ID: STDDADM1V09N
+        │                 Name: Shannon Patrick
+        │                 Title: SAM 15 / LTA
+        │                 Ref: 4VW
+        │                 │
+        │                 └── DEPTALTEY17Y | Nadia Khan / Wesli Turner | Dept. Analyst
+        │
+        ├── [G4010] PPOS INTEGRATION SECTION
+        │     Position ID: STDDADM1V12N
+        │     Name: Vicki Riddick
+        │     Title: SAM 15 - LTA
+        │     Ref: 4VV
+        │     │
+        │     └── DEPSPL3E18N | Elizabeth Hartig | Dept. Specialist
+        │
+        ├── [D6000] BUREAU OF ORGANIZATIONAL SERVICES
+        │     Position ID: BUREAADMB84N
+        │     Name: William Doxie*
+        │     Title: State Bureau Admin.
+        │     Ref: 2BUL
+        │     (Further detail not shown in these pages)
+        │
+        ├── [WD000] OFFICE OF WORKFORCE DEVELOPMENT AND TRAINING
+        │     Position ID: STDIVADMF16N
+        │     Name: Stacie Gibson
+        │     Title: State Division Admin.
+        │     Ref: 2CLN
+        │     (Further detail not shown in these pages)
+        │
+        ├── [G0010] COMMISSIONS & SPECIAL PROJECTS SECTION
+        │     Position ID: STDDADM1M77N
+        │     Name: Marcus Connolly
+        │     Title: SAM
+        │     Ref: 3AV
+        │     │
+        │     ├── DEPSPL2S18N | Katherine Tucker | Departmental Specialist
+        │     ├── DEPTALTEK78Y | Justin Easter | Dept. Analyst
+        │     └── DEPTALTEO34Y | Tiffani Stanton | Dept. Analyst
+        │
+        └── [G0020] CON EVALUATION SECTION
+              Position ID: STDDADM1B23N
+              Name: Tulika Bhattacharya
+              Title: SAM
+              Ref: 3HY
+              │
+              ├── SECRTRYAA81R | Rachel Remenar | Secretary
+              ├── FINSPL2B50N | Thomas Reese Jr. | Financial Specialist
+              ├── DEPSPL2F01N | Ashley Mayor | Departmental Specialist
+              ├── DEPSPL2E71N | Laura Duncan | Departmental Specialist
+              ├── DEPSPL2E70N | Cliffaney Wilkinson | Departmental Specialist
+              ├── DEPTALTEP92N | Susan Patino | Dept. Analyst
+              ├── DEPTALTE776N | Christopher Tyranski / Amanda Curtis | Dept. Analyst
+              ├── DEPTALTEC74Y | Vacant | Dept. Analyst
+              └── STUDASTEA55N | Vacant | Student Assistant
+
+        [V1000] DIVISION OF VICTIM SERVICES
+              Position ID: STOFCADMF45N
+              Name: Gail Krieger
+              Title: SOA 17
+              Ref: 4VF
+              (Reports via G0020/G4000 cross-ref; further detail not shown in these pages)
+
+
+================================================================================
+NOTES
+================================================================================
+- FRZ = Frozen position
+- SAM = State Administrative Manager (SAM 15 = classification level 15)
+- SBA/SDA = State Bureau/Division Administrator
+- SEMA = State Emergency Management Administrator (or role code)
+- LTA = Limited Term Appointment
+- * = Special designation
+- Ref codes (1G, 2FBB, 3AV, etc.) = cross-reference connectors between org chart pages
+- Some positions list two names (shared/interim coverage), e.g. Tyranski/Curtis, Khan/Turner
+- Vacant positions explicitly noted

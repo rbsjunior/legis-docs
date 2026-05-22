@@ -1,0 +1,85 @@
+
+
+ 
+
+ 
+
+substitute for
+
+House BILL NO. 5505
+
+A bill to create the digital oversight office; and to prescribe the powers and duties of the office, certain officials, and state agencies.
+
+the peoplE of the state of michigan enact:
+
+Sec. 1. As used in this act:
+
+(a) "Office" means the digital oversight office created under this act.
+
+(b) "Officer" means the digital oversight officer appointed in section 2.
+
+(c) "State agency" means a department, board, commission, office, agency, authority, or other unit of state government.
+
+Sec. 2. (1) The office of digital oversight is created in the legislature. The office consists of the officer and staff the officer appoints to carry out the duties of the office.
+
+(2) The principal executive officer of the office is the digital oversight officer. The legislature, by a majority vote of the members elected to and serving in each house, shall appoint a digital oversight officer to serve for a term of 3 years. The officer may be removed for cause at any time by a 2/3 vote of the members elected to and serving in each house.
+
+(3) The office shall do all of the following:
+
+(a) Investigate information technology projects, services, and purchasing by state agencies.
+
+(b) Overtake, join, or collaborate with state agencies on information technology projects.
+
+(c) Support adoption of modern software development best practices, including agile development methodologies and open-source practices for the development and deployment of new and existing digital services. Practices must include advocacy of modern software development tools and practices, such as DevSecOps, modular contracting, user-centered design, iterative and incremental development, unified, development infrastructure, service-oriented architecture, open-source software, and modern best practices as described in the following 13 plays of the Digital Services Playbook published by the United States Digital Service:
+
+(i) Understand what people need.
+
+(ii) Address the whole experience, from start to finish.
+
+(iii) Make it simple and intuitive.
+
+(iv) Build the service using agile and iterative practices.
+
+(v) Structure budgets and contracts to support delivery.
+
+(vi) Assign 1 leader and hold that individual accountable.
+
+(vii) Bring in experienced teams.
+
+(viii) Choose a modern technology stack.
+
+(ix) Deploy in a flexible hosting environment.
+
+(x) Automate testing and deployments.
+
+(xi) Manage security and privacy through reusable processes.
+
+(xii) Use data to drive decisions.
+
+(xiii) Default to open.
+
+(d) Study innovative procurement practices to the acquisition of digital products by and for state departments and agencies, to facilitate the rapid provision of high-quality digital services that are based on users' needs and that comply with state best practices and policies regarding data privacy, security, and accessibility.
+
+(e) Manage cybersecurity by complying with industry best practices.
+
+(4) The office may commence an investigation or overtake, join, or collaborate on information technology projects on either of the following:
+
+(a) Receipt of a complaint from a state agency or an individual concerning an information technology project, service, or purchase by a state agency that is in danger of exceeding expected costs or deadlines, or where the product may fail to achieve desired outcomes.
+
+(b) The office's own initiative.
+
+(5) The office shall establish procedures for receiving and processing complaints and conducting investigations.
+
+(6) On request, a state agency shall give the office access to physical or electronic copies of all information, records, and documents in the possession of any state agency that the office considers necessary in an investigation concerning an information technology project, service, or purchase.
+
+(7) All of the following apply to confidential information obtained under this section:
+
+(a) The office is subject to the same duty of confidentiality imposed by law on the entity providing the confidential information.
+
+(b) The officer and office staff are subject to any civil or criminal penalties imposed by law for unlawfully disclosing that confidential information.
+
+(c) Notwithstanding any other provision of law to the contrary, state officers and employees of all branches, departments, offices, boards, commissions, agencies, authorities, and institutions of this state are not subject to civil or criminal penalties imposed by state law for providing information requested by the office.
+
+(8) This act does not authorize the office to access or examine records or information subject to the attorney-client privilege or executive privilege, or subject to a court order prohibiting disclosure of the content of the record or information.
+
+(9) All records of the office in connection with investigations are exempt from disclosure under the freedom of information act, 1976 PA 442, MCL 15.231 to 15.246.
