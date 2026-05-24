@@ -1,6 +1,6 @@
 # LEGIS — Implementation Plan
 
-*Documented: 2026-05-01 — Last updated: 2026-05-22 (session 5)*
+*Documented: 2026-05-01 — Last updated: 2026-05-23 (session 6)*
 
 ---
 
@@ -13,7 +13,7 @@
 ## Highest-Risk Items (de-risk early)
 
 1. **Approval path data model** — storing zero or more parallel Admin paths + standalone bureaus converging at COO as DB records
-2. **TipTap attributed contributions** — per-contribution who/when attribution requires a custom extension
+2. **TipTap real-time collaboration** — Yjs + Hocuspocus WebSocket server on Railway; needs careful Railway deployment config
 3. **Approval invalidation cascade** — any field edit after approval must void all downstream approvers correctly
 
 ---
@@ -45,12 +45,12 @@
 - [x] Inline section editing (Sections 2–13) — `useActionState` + Server Actions; `revalidatePath` refreshes server data after save; `successAt: number` timestamp triggers `useEffect` close on every save
 - [x] Zod server-side validation in all Server Actions (not React Hook Form — see tech-stack note)
 - [x] shadcn/ui installed — Nova preset (`base-nova`), uses `@base-ui/react` (Base UI from MUI); components: Button, Input, Textarea, Select, Checkbox, Badge, Card, Label, Table, Separator
-- [ ] TipTap rich text integration — deferred to Phase 4 (currently plain `<textarea>`)
+- [ ] TipTap rich text integration — in progress (Phase 4); currently plain `<textarea>` except Section 5 narrative
 
 ---
 
 ### Phase 3 — Workflow & Approval Engine ✅
-*Core engine complete 2026-05-16; gates + Sr. Deputy edit fix 2026-05-21; proxy + exec selection + mid-workflow changes complete 2026-05-22; seed consolidated to real MDHHS staff + GitHub Actions CI added 2026-05-22*
+*Core engine complete 2026-05-16; gates + Sr. Deputy edit fix 2026-05-21; proxy + exec selection + mid-workflow changes complete 2026-05-22; seed consolidated to real MDHHS staff + GitHub Actions CI added 2026-05-22; bug fixes + seed additions 2026-05-23*
 
 **Completed:**
 - [x] `WorkflowStatus` state machine — DRAFT → SUBMITTED → SME_REVIEW → LAI_REVIEW → EXECUTIVE_REVIEW → APPROVED → ENROLLED; all transitions server-validated by role + current status
@@ -69,7 +69,8 @@
 - [x] Executive lock — `updateBill` action rejects edits from non-exec roles once status reaches EXECUTIVE_REVIEW/APPROVED/ENROLLED
 - [x] Railway deployment — `railway.json` runs `npx prisma migrate deploy && npm start`; `engines: { node: ">=22.12.0" }` in `package.json`
 - [x] GitHub Actions CI — `.github/workflows/db-migrate-and-deploy.yml` at git root (one level above `legis/`); triggers on push to `main`; runs `npx prisma migrate deploy` against `NEON_DEV_DATABASE_URL` secret; `defaults.run.working-directory: legis` for all run steps; `cache-dependency-path: legis/package-lock.json`
-- [x] Seed script updated — 46 users total; all test emails use `@legis.test` domain (stale `@mdhhs.test` records deleted on each seed run via `deleteMany`); includes real Legislative Affairs staff (Chardae Burton, Jeffrey Spitzley, Marina Wyrzykowski, Mary Imre, Nicholas Rossow, Lesley Keyton, Caryn Shannon, Elaine Heckman, Nicole Nelson); org units: Children's Services Administration (with Sr. Deputy), Juvenile Justice Bureau (under CSA), Bureau of Finance (standalone), Office of Legal Affairs (standalone division), Legislative Affairs (standalone division, `bureauId: null`, under COO), LG010 Legislative Affairs Section, LG020 Legislative Constituent Services Section; LG010 members hold triple-role `LAI + APOC + LA_CONTACT`; org assignments wired to all users
+- [x] Seed script updated — real MDHHS staff with `@legis.test` domain; org units: Children's Services Administration (with Sr. Deputy), Juvenile Justice Bureau (under CSA), Bureau of Finance (standalone), Office of Legal Affairs (standalone division), Legislative Affairs (standalone division), LG010/LG020 sections; LG010 members hold triple-role `LAI + APOC + LA_CONTACT`
+- [x] Seed additions (2026-05-23) — Financial Operations Administration (Amy Epkey, SENIOR_DEPUTY); Bureau of Budget (under FO Admin); Human Services Budget Division + Health Care & Aging Services Budget Division (under Bureau of Budget); Children's Services Administration Section (D3130) + Medical Services Administration Section (D3030); 5 new staff: Matthew Deaton, Jensine Garza (CSA Section), Tyler Bishop (Human Svc Div), Kelly Wilcox (Medical Svc Section) — all SME role
 - [x] Multi-role support — `User.role Role` → `User.roles Role[]`; all role checks updated to `.some()` / `.includes()` across the array; auth JWT/session carry `roles[]`; `trustHost: true` added to fix Railway `UntrustedHost` error
 - [x] LAI creation form simplified — Sr. Deputy assignment removed; LAI assigns APOC and LA Contact only; Sr. Deputies assigned exclusively by APOC via `ApprovalPathBuilder`
 - [x] `BillSeniorDeputy` model dropped — schema migration applied; access control for Sr. Deputies derived from `ApprovalDecision` rows
@@ -85,6 +86,7 @@
 - [x] Executive approver selection decoupled from LAI approval — `setExecApprovers` Server Action + `ExecApproverSelector` client component (`app/(app)/bills/[id]/_components/ExecApproverSelector.tsx`); APOC or LAI selects individual exec approvers and conditional flags (CAO/HSD/CME) during `LAI_REVIEW` as a distinct step; `laiApprove` validates selections are present before transitioning to `EXECUTIVE_REVIEW`
 - [x] Proxy approver assignment — `BillProxyAssignment` model; `assignProxy` / `removeProxy` Server Actions; `ProxyAssignmentPanel` client component; APOC or LAI assigns a `PROXY_APPROVER` user to act on behalf of any pending approver on a specific bill; `recordDecision` updated to allow proxy submission and record `proxyApproverId` on the decision
 - [x] Mid-workflow bill changes — `BillChangeNotice` model; `recordBillChange` Server Action; `BillChangeNoticeForm` client component; LAI records a required comment (≥10 chars) when bill text changes; all active non-voided `APPROVED` decisions are voided and replaced with fresh `PENDING` rows; change notices displayed as amber banner in `WorkflowPanel`; available up to and including `LAI_REVIEW`; auto-email to APOC/SMEs/Sr. Deputies is deferred to Phase 5
+- [x] Bug fix (2026-05-23) — `WorkflowPanel.tsx`: `proxiedApproverIds` used before initialization; `billProxyAssignment.findMany` query moved above `myPendingDecision` computation; duplicate query block at old location removed
 
 **Workflow ordering summary (from legis_workflow_v4.svg):**
 
@@ -110,17 +112,25 @@ Sr. Deputy Director  — approves last for their path
 
 ---
 
-### Phase 4 — Collaboration & Audit
+### Phase 4 — Collaboration & Audit *(in progress)*
 
-- **TipTap rich text editor** — replace all plain `<textarea>` fields across Sections 2–13 with TipTap; affects 10+ Rich Text fields; store content as JSON (TipTap ProseMirror format) or HTML; migrate existing plain-text values on first save
-- **Collaborative field attribution** — TipTap custom extension: per-contribution who/when attribution; multiple stakeholders may contribute to the same field; APOC or LAI consolidates; attribution metadata stored alongside content (not a separate table — embedded in TipTap document JSON)
-- **Audit trail** — `AuditLog` model required (does not yet exist in schema); log every field write with: `billAnalysisId`, `userId`, `field` (string), `oldValue`, `newValue`, `editedAt`; note: the existing `voidedAt` pattern on `ApprovalDecision` is approval history only, not a general audit trail; `lastModifiedById` on `BillAnalysis` is last-editor only, not a history
-- **`updateBill` access guard** — security gap: the `updateBill` Server Action (`app/actions/bills.ts`) validates workflow status and exec lock but does NOT verify the calling user is actually assigned to the bill; any authenticated user who knows a bill ID can POST edits; fix: load the bill with assignment fields and reject if user is not LAI, APOC, LA Contact, assigned SME, or Sr. Deputy on an approval path
-- **Completion % calculation** — system-calculated from required field fill rate; currently hardcoded to `0` on all records
-- **Previous Department Review Reference** — FK on `BillAnalysis` pointing to a prior LEGIS record (same or predecessor bill); set by LAI at creation or any time during drafting:
-  - Schema: `previousReviewId String?` FK → `BillAnalysis.id`; self-relation; display in Section 1 header (currently missing from schema and UI)
-  - Clone action — LAI triggers "Copy from previous review" to pre-populate selected sections (Summary, Intent, Lead Agency Position, Position Details, Suggested Changes, Fiscal Impact, Background, Stakeholder Positions) from the referenced record; cloned content is a plain editable draft; Section 1 and system/workflow fields are never cloned; can only be performed once per record; confirmation prompt required before overwriting existing content
-  - "View Prior Review" panel — shown on any record that has a previous review linked; side-by-side comparison of key fields (Bill Number, Topic, Lead Agency Position, Summary, date); link to navigate to the prior record; full chain traversable if the prior record itself has a previous review
+**Completed (2026-05-23):**
+- [x] `updateBill` access guard — `app/actions/bills.ts` now fetches `apocId`, `laContactId`, `smes { userId }`, `approvalPaths { srDeputyId }` on the bill; rejects if caller is not an LA role (`ADMIN/LAI/APOC/LA_CONTACT`) and not explicitly assigned (as APOC, LA Contact, SME, or Sr. Deputy on a path); exec users in a locked bill bypass the assignment check — they already passed the exec-lock gate above it
+- [x] TipTap installed — `@tiptap/react@3.23.6` + `@tiptap/starter-kit@3.23.6`; `immediatelyRender: false` for SSR safety
+- [x] `RichTextEditor` component (`app/(app)/bills/[id]/_components/RichTextEditor.tsx`) — "use client"; Bold / Italic / ul / ol toolbar; syncs editor JSON to a hidden `<input>` so content submits with the existing Server Action form unchanged; `parseInitialContent()` handles both stored TipTap JSON and legacy plain-text strings
+- [x] `RichTextContent` component (`app/(app)/bills/[id]/_components/RichTextContent.tsx`) — "use client"; `generateHTML()` from `@tiptap/core` for JSON content; HTML-escaped plain-text fallback for values stored before TipTap; `dangerouslySetInnerHTML` render
+- [x] `.rich-text` CSS — added to `app/globals.css`; styles `p`, `ul`, `ol`, `li`, `strong`, `em`, `code` so editor and read view render consistently; no `@tailwindcss/typography` dependency
+- [x] Section 5 narrative field wired — `suggestedChangesNarrative`: `<textarea>` → `<RichTextEditor>`; read-path `<p>` → `<RichTextContent>`; structured changes rows (page/line/instruction/explanation) are plain inputs and unchanged
+
+**Remaining:**
+- [ ] TipTap rollout — wire `RichTextEditor` / `RichTextContent` to remaining Rich Text fields: Sections 2 (intentOfLegislation), 3 (summary), 4 (positionDetails), 6 (fiscal fields ×4), 7 (significantChanges), 8 (proArguments, conArguments), 9 (stakeholderPositions), 10 (background, problemBeingAddressed), 11 (legalCitation text — probably keep plain), 13 (finOpsReview)
+- [ ] **Collaborative real-time editing** — approach confirmed: Yjs + Hocuspocus WebSocket server (not attribution marks); requires `@tiptap/extension-collaboration`, `@tiptap/extension-collaboration-cursor`, Hocuspocus server deployed on Railway as a separate service; document room keyed by `billId + fieldName`
+- [ ] Audit trail — `AuditLog` model (does not yet exist in schema); log every field write with: `billAnalysisId`, `userId`, `field` (string), `oldValue`, `newValue`, `editedAt`; note: existing `voidedAt` on `ApprovalDecision` is approval history only, not a general audit trail; `lastModifiedById` on `BillAnalysis` is last-editor only, not a history
+- [ ] Completion % calculation — system-calculated from required field fill rate; currently hardcoded to `0` on all records
+- [ ] Previous Department Review Reference — FK on `BillAnalysis` pointing to a prior LEGIS record:
+  - Schema: `previousReviewId String?` FK → `BillAnalysis.id`; self-relation; needs migration
+  - Clone action — LAI triggers "Copy from previous review" to pre-populate selected sections; once per record; confirmation prompt before overwriting
+  - "View Prior Review" panel — side-by-side key fields; full chain traversable
 
 ---
 
@@ -162,6 +172,7 @@ Sr. Deputy Director  — approves last for their path
 
 - ~~Admin UI: user management, role assignment, org structure management~~ — completed in Phase 3
 - ~~Section 12 conditional display (post-enrollment only)~~ — completed in Phase 2
+- ~~`OrgAdmin.tsx` Section type bug~~ — fixed 2026-05-23; `bureau` and `division` typed as `| null` to match Prisma query result (was blocking builds)
 - **Dashboard** — currently a stub (shows username + roles only); build: bills awaiting the current user's action (pending decisions, awaiting APOC path setup, awaiting LAI review), counts by workflow status, recent activity
 - Emergency override controls (ADMIN role)
 - Bill list: search, filter by status / priority / assignee
@@ -175,7 +186,7 @@ Sr. Deputy Director  — approves last for their path
 ```
 Phase 1 ✅ → Phase 2 ✅ → Phase 3 ✅
                                     ↓
-                              Phase 4 (TipTap + audit trail + access guard + previous review reference)
+                              Phase 4 (in progress — TipTap + real-time collab + audit trail + previous review)
                                     ↓
                               Phase 5 (email notifications)
                                     ↓
@@ -186,6 +197,6 @@ Phase 1 ✅ → Phase 2 ✅ → Phase 3 ✅
 
 Phases 5 and 6 can begin in parallel once Phase 4 is stable — email requires workflow events; PDF/file upload requires form data; neither blocks the other.
 
-**Phase 4 recommended order:** fix `updateBill` access guard first (security), then TipTap integration (touches all sections — do before audit trail so log captures rich text format from the start), then audit trail schema + logging, then completion %, then previous review reference (needs schema migration).
+**Phase 4 remaining order:** TipTap rollout to all remaining Rich Text fields → real-time collaborative editing (Yjs + Hocuspocus on Railway) → audit trail schema + logging → completion % → previous review reference (schema migration).
 
 > **Key recommendation:** Spend extra design time on the approval path schema in Phase 2 before writing any Phase 3 UI. A wrong data model at that layer is expensive to unwind.
