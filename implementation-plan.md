@@ -1,6 +1,6 @@
 # LEGIS — Implementation Plan
 
-*Documented: 2026-05-01 — Last updated: 2026-05-26 (session 7)*
+*Documented: 2026-05-01 — Last updated: 2026-05-26 (session 8)*
 
 ---
 
@@ -127,9 +127,9 @@ Sr. Deputy Director  — approves last for their path
 - [x] TipTap rollout complete — `RichTextEditor` / `RichTextContent` wired to all remaining Rich Text fields: Section 2 (intentOfLegislation), 3 (summary), 4 (positionDetails), 6 (fiscalDeptBudgetary, fiscalDeptComments, fiscalStateBudgetary, fiscalLocalGovt), 7 (significantChanges), 8 (proArguments, conArguments — edit layout switched from grid-cols-2 to stacked for editor width), 9 (stakeholderPositions), 10 (background, problemBeingAddressed), 13 (finOpsReview); `SimpleTextSection` upgraded to use rich text by default (covers Sections 3, 7, 9, 13 in one edit); legalCitation (Section 11) kept as plain text per requirements
 - [x] Global font/color improvements — `app/globals.css`: `html { font-size: 106.25% }` (17px base, scales all rem sizes); `--color-zinc-400` and `--color-zinc-500` remapped one step darker in `@theme`; `--muted-foreground` darkened from 55.6% to 40% lightness; affects all screens without component changes
 - [x] Bill document attachments (Phase 6 pulled forward, 2026-05-26) — `BillDocument` model + migration applied; Railway Storage (S3-compatible, endpoint `t3.storageapi.dev`) via AWS SDK v3; accepted formats: PDF, HTML, plain text, Markdown, XML (up to 50 MB); file uploads via `POST /api/documents/upload` (Route Handler — no body size limit); signed download URLs via `GET /api/documents/[id]` (15-min expiry, access-gated by bill assignment); `removeDocument` + `setDocumentPrimary` Server Actions; `BillDocumentPanel` (Server Component) + `AddDocumentForm` (Client Component using `fetch`); first uploaded doc auto-becomes primary; LAI/APOC/ADMIN may add/remove/promote at any stage prior to executive lock; panel sits between BillHeader and WorkflowPanel on detail page; credentials in `.env.local` and Railway dashboard env vars
+- [x] Audit trail (2026-05-26) — `AuditLog` model (`billAnalysisId`, `userId`, `section Int?`, `field`, `oldValue`, `newValue`, `createdAt`); `section = null` for document events, `section 2–13` for section field edits; `diffFields()` helper diffs old/new values per-field — only logs changes (no no-op noise); all Sections 2–13 Server Actions in `app/actions/bills.ts` emit `auditLog.createMany()` in same `$transaction` as `billAnalysis.update()`; document events (upload, remove, set-primary) emit `auditLog.create()` in same `$transaction` as the document operation; `AuditLogPanel` Server Component (self-fetching, 200 logs newest-first) — collapsible `<details>/<summary>`; TipTap JSON fields displayed as extracted plain text (120-char preview); document events formatted as "Added / Removed / Set primary" with filename, MIME, size; panel mounted above Section 14 on detail page; migration `20260526040000` makes `section` nullable
 
 **Remaining:**
-- [ ] **Audit trail** ← next — `AuditLog` model (does not yet exist in schema); log every field write with: `billAnalysisId`, `userId`, `field` (string), `oldValue`, `newValue`, `editedAt`; note: existing `voidedAt` on `ApprovalDecision` is approval history only, not a general audit trail; `lastModifiedById` on `BillAnalysis` is last-editor only, not a history
 - [ ] Completion % calculation — system-calculated from required field fill rate; currently hardcoded to `0` on all records
 - [ ] Previous Department Review Reference — FK on `BillAnalysis` pointing to a prior LEGIS record:
   - Schema: `previousReviewId String?` FK → `BillAnalysis.id`; self-relation; needs migration
@@ -198,6 +198,6 @@ Phase 1 ✅ → Phase 2 ✅ → Phase 3 ✅
 
 Phases 5 and 6 can begin in parallel once Phase 4 is stable — email requires workflow events; PDF/file upload requires form data; neither blocks the other.
 
-**Phase 4 remaining order:** Audit trail schema + logging → completion % → previous review reference → real-time collaborative editing (Yjs + Hocuspocus on Railway — highest risk, do last).
+**Phase 4 remaining order:** Completion % → previous review reference → real-time collaborative editing (Yjs + Hocuspocus on Railway — highest risk, do last).
 
 > **Key recommendation:** Spend extra design time on the approval path schema in Phase 2 before writing any Phase 3 UI. A wrong data model at that layer is expensive to unwind.
