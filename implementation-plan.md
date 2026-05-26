@@ -1,6 +1,6 @@
 # LEGIS — Implementation Plan
 
-*Documented: 2026-05-01 — Last updated: 2026-05-23 (session 6)*
+*Documented: 2026-05-01 — Last updated: 2026-05-26 (session 7)*
 
 ---
 
@@ -126,11 +126,10 @@ Sr. Deputy Director  — approves last for their path
 **Completed (2026-05-26):**
 - [x] TipTap rollout complete — `RichTextEditor` / `RichTextContent` wired to all remaining Rich Text fields: Section 2 (intentOfLegislation), 3 (summary), 4 (positionDetails), 6 (fiscalDeptBudgetary, fiscalDeptComments, fiscalStateBudgetary, fiscalLocalGovt), 7 (significantChanges), 8 (proArguments, conArguments — edit layout switched from grid-cols-2 to stacked for editor width), 9 (stakeholderPositions), 10 (background, problemBeingAddressed), 13 (finOpsReview); `SimpleTextSection` upgraded to use rich text by default (covers Sections 3, 7, 9, 13 in one edit); legalCitation (Section 11) kept as plain text per requirements
 - [x] Global font/color improvements — `app/globals.css`: `html { font-size: 106.25% }` (17px base, scales all rem sizes); `--color-zinc-400` and `--color-zinc-500` remapped one step darker in `@theme`; `--muted-foreground` darkened from 55.6% to 40% lightness; affects all screens without component changes
-- [x] Bill document attachments — *next to implement (Phase 6 pulled forward)*
+- [x] Bill document attachments (Phase 6 pulled forward, 2026-05-26) — `BillDocument` model + migration applied; Railway Storage (S3-compatible, endpoint `t3.storageapi.dev`) via AWS SDK v3; accepted formats: PDF, HTML, plain text, Markdown, XML (up to 50 MB); file uploads via `POST /api/documents/upload` (Route Handler — no body size limit); signed download URLs via `GET /api/documents/[id]` (15-min expiry, access-gated by bill assignment); `removeDocument` + `setDocumentPrimary` Server Actions; `BillDocumentPanel` (Server Component) + `AddDocumentForm` (Client Component using `fetch`); first uploaded doc auto-becomes primary; LAI/APOC/ADMIN may add/remove/promote at any stage prior to executive lock; panel sits between BillHeader and WorkflowPanel on detail page; credentials in `.env.local` and Railway dashboard env vars
 
 **Remaining:**
-- [ ] **Bill document attachments** ← next; pulled forward from Phase 6 — file upload to Railway Storage (AWS SDK v3), document list UI, mid-workflow primary document promotion, draft comparison link
-- [ ] **Audit trail** — `AuditLog` model (does not yet exist in schema); log every field write with: `billAnalysisId`, `userId`, `field` (string), `oldValue`, `newValue`, `editedAt`; note: existing `voidedAt` on `ApprovalDecision` is approval history only, not a general audit trail; `lastModifiedById` on `BillAnalysis` is last-editor only, not a history
+- [ ] **Audit trail** ← next — `AuditLog` model (does not yet exist in schema); log every field write with: `billAnalysisId`, `userId`, `field` (string), `oldValue`, `newValue`, `editedAt`; note: existing `voidedAt` on `ApprovalDecision` is approval history only, not a general audit trail; `lastModifiedById` on `BillAnalysis` is last-editor only, not a history
 - [ ] Completion % calculation — system-calculated from required field fill rate; currently hardcoded to `0` on all records
 - [ ] Previous Department Review Reference — FK on `BillAnalysis` pointing to a prior LEGIS record:
   - Schema: `previousReviewId String?` FK → `BillAnalysis.id`; self-relation; needs migration
@@ -156,14 +155,9 @@ Sr. Deputy Director  — approves last for their path
 
 ---
 
-### Phase 6 — Files & PDF
+### Phase 6 — PDF Generation
 
-**Bill document attachments:**
-- File upload to Railway Storage (S3-compatible) via AWS SDK v3; accepted formats: PDF (primary), HTML, plain text, Markdown, XML; at least one of file upload or public URL required per document entry
-- Each document entry stores: label/filename, upload date, uploader (FK → User), optional public URL (e.g. Michigan Legislature link), Railway Storage key for uploaded file
-- Document list UI: label/filename, upload date, uploader name, download link (if file uploaded), open URL link (if URL provided)
-- Management: LAI and APOC may add or remove documents at any workflow stage prior to executive lock
-- Mid-workflow primary document promotion: when LAI records a bill change (Phase 3), the new upload becomes current primary; prior versions demoted but retained and visible in document history
+~~**Bill document attachments** — pulled into Phase 4; complete as of 2026-05-26~~
 
 **Comparison & PDF:**
 - Bill draft comparison link: when two or more documents are present, construct comparison link using their public URLs (user-supplied URL or Railway Storage download URL); load comparison tool in new tab or embedded iframe (integration details TBD)
@@ -204,6 +198,6 @@ Phase 1 ✅ → Phase 2 ✅ → Phase 3 ✅
 
 Phases 5 and 6 can begin in parallel once Phase 4 is stable — email requires workflow events; PDF/file upload requires form data; neither blocks the other.
 
-**Phase 4 remaining order:** Bill document attachments (pulled forward from Phase 6) → audit trail schema + logging → completion % → previous review reference → real-time collaborative editing (Yjs + Hocuspocus on Railway — highest risk, do last).
+**Phase 4 remaining order:** Audit trail schema + logging → completion % → previous review reference → real-time collaborative editing (Yjs + Hocuspocus on Railway — highest risk, do last).
 
 > **Key recommendation:** Spend extra design time on the approval path schema in Phase 2 before writing any Phase 3 UI. A wrong data model at that layer is expensive to unwind.

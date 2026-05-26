@@ -1,6 +1,6 @@
 # LEGIS — Technical Stack
 
-*Documented: 2026-05-01 — Updated: 2026-05-22 (session 5)*
+*Documented: 2026-05-01 — Updated: 2026-05-26 (session 7)*
 
 ---
 
@@ -127,10 +127,18 @@ The `ADMIN` role can be assigned to any user via the Users admin page (`/admin/u
 
 | Need | Tool |
 |---|---|
-| Upload/retrieve bill drafts (PDF, HTML, markup) | Railway Storage via **AWS SDK v3** (S3-compatible API) |
+| Upload/retrieve bill drafts (PDF, HTML, markup) | Railway Storage via **AWS SDK v3** (S3-compatible API) — **implemented Phase 4** |
 | Generate PDF bill analysis + routing sheet | **Puppeteer** — renders Next.js templates server-side to PDF |
 | Extract text from uploaded PDFs for diffing | **pdf-parse** |
 | Bill version comparison | Link out to external comparison tool (per requirements); integration point within the record |
+
+**Railway Storage implementation details (Phase 4):**
+- Endpoint: `https://t3.storageapi.dev` (Tigris-backed Railway Object Storage)
+- Files stored under `bills/{billAnalysisId}/{uuid}.{ext}`; keys held in `BillDocument.storageKey`
+- Uploads: `POST /api/documents/upload` (Route Handler — bypasses Next.js Server Action 1 MB body limit; handles up to 50 MB)
+- Downloads: `GET /api/documents/[id]` (generates 15-min presigned S3 URL, redirects browser; access-gated by bill assignment)
+- `app/lib/storage.ts` wraps `uploadFile` / `getDownloadUrl` / `deleteFile`
+- Accepted MIME types: `application/pdf`, `text/html`, `text/plain`, `text/markdown`, `application/xml`, `text/xml`
 
 > **Note on Puppeteer:** Memory-intensive per render. If PDF generation volume grows, migrate to **React PDF** (pure JS, no headless browser) — requires building layouts manually.
 
@@ -147,6 +155,6 @@ Next.js 15 (App Router)
   ├── TipTap (rich text — Phase 4)
   ├── Resend + React Email (transactional email — Phase 5)
   ├── Inngest (background job queue — Phase 5)
-  ├── Railway Storage + AWS SDK v3 (file uploads — Phase 6)
+  ├── Railway Storage + AWS SDK v3 (file uploads — implemented Phase 4)
   └── Puppeteer (server-side PDF generation — Phase 6)
 ```
