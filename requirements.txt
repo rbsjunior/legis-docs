@@ -119,7 +119,7 @@ All analyses require **COO** and **Director** approval. `CAO`, `HSD`, and `CME` 
 
 *Source: OHS Bill Analysis/Enrolled Bill Analysis Template (doc-page-1 through doc-page-4)*
 
-**One bill per record.** Related bills are linked via the Related Bill Numbers field.
+**One analysis per bill package.** A package contains one or more companion bills that share a single analysis record — the analysis content (Sections 2–13), workflow, and approval chain apply to the package as a whole. The Related Bill Numbers field cross-references other LEGIS records (e.g. prior-session bills or related analyses), and is separate from the bills within this package.
 
 ### Editing and Collaboration Rules
 
@@ -202,8 +202,8 @@ If the bill is amended or substituted while department analysis is in progress, 
 | Field | Type | Required | Notes |
 |-------|------|----------|-------|
 | Date | Date | Yes | Date analysis was initiated |
-| Bill Number | String | Yes | Single bill, e.g. "HB 9999" |
-| Topic / Title | String | Yes | Brief descriptive title |
+| Bill Package | BillPackageBill[] | Yes | One or more bill numbers in this package, e.g. "HB 4037, HB 4038"; at least one required; displayed as "Bill Number" (single) or "Bill Package" (multiple) |
+| Topic / Title | String | Yes | Brief descriptive title for the package as a whole |
 | Sponsors | Text | No | e.g. "Representatives X and Y" |
 | Bipartisan Support | Boolean | No | Yes / No |
 | Committee | String | No | e.g. "House Health Policy" |

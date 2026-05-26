@@ -39,13 +39,14 @@
 *Data model + CRUD — complete 2026-05-14*
 
 - [x] Full Prisma schema for all 14 sections — 6 enums + 6 models; `BillAnalysis` flat (all section columns), child tables for `BillReviewer`, `SuggestedChange`, `BillSme`, `BillApprovalPath`, `ApprovalDecision`; migrated to Neon dev branch (`BillSeniorDeputy` dropped — Sr. Deputies assigned exclusively via `BillApprovalPath.srDeputyId`)
+- [x] Multi-bill package support (2026-05-26) — replaced single `billNumber: String` with `BillPackageBill` child table; one or more bill numbers per analysis; at least one required at creation; `createBill` action, `CreateBillForm` (multi-entry list), bill list (shows up to 2 joined with " / ", "+N more"), bill detail page query, `Section1` ("Bill Number" / "Bill Package" label), and `BillHeader` all updated; migration SQL migrates existing `billNumber` values before dropping the column; `relatedBillNumbers` retained for cross-referencing other LEGIS records
 - [x] Bill list view (`/bills`) — scoped by role: LA roles see all; others see assigned only; status badges, priority, created-by, date columns
 - [x] Create record (`/bills/new`) — Section 1 locked at creation; dynamic reviewer list; senior deputy checkboxes; APOC/LA Contact dropdowns; Server Action + Zod validation
 - [x] Detail view (`/bills/[id]`) — full 13-section layout; per-section inline edit with save/cancel; executive lock enforced; Section 12 shown only when `workflowStatus === ENROLLED`
 - [x] Inline section editing (Sections 2–13) — `useActionState` + Server Actions; `revalidatePath` refreshes server data after save; `successAt: number` timestamp triggers `useEffect` close on every save
 - [x] Zod server-side validation in all Server Actions (not React Hook Form — see tech-stack note)
 - [x] shadcn/ui installed — Nova preset (`base-nova`), uses `@base-ui/react` (Base UI from MUI); components: Button, Input, Textarea, Select, Checkbox, Badge, Card, Label, Table, Separator
-- [ ] TipTap rich text integration — in progress (Phase 4); currently plain `<textarea>` except Section 5 narrative
+- [x] TipTap rich text integration — complete (Phase 4, 2026-05-26); all Rich Text fields wired across Sections 2–10, 13; `RichTextEditor` + `RichTextContent` components; `SimpleTextSection` upgraded to use rich text by default
 
 ---
 
@@ -122,15 +123,20 @@ Sr. Deputy Director  — approves last for their path
 - [x] `.rich-text` CSS — added to `app/globals.css`; styles `p`, `ul`, `ol`, `li`, `strong`, `em`, `code` so editor and read view render consistently; no `@tailwindcss/typography` dependency
 - [x] Section 5 narrative field wired — `suggestedChangesNarrative`: `<textarea>` → `<RichTextEditor>`; read-path `<p>` → `<RichTextContent>`; structured changes rows (page/line/instruction/explanation) are plain inputs and unchanged
 
+**Completed (2026-05-26):**
+- [x] TipTap rollout complete — `RichTextEditor` / `RichTextContent` wired to all remaining Rich Text fields: Section 2 (intentOfLegislation), 3 (summary), 4 (positionDetails), 6 (fiscalDeptBudgetary, fiscalDeptComments, fiscalStateBudgetary, fiscalLocalGovt), 7 (significantChanges), 8 (proArguments, conArguments — edit layout switched from grid-cols-2 to stacked for editor width), 9 (stakeholderPositions), 10 (background, problemBeingAddressed), 13 (finOpsReview); `SimpleTextSection` upgraded to use rich text by default (covers Sections 3, 7, 9, 13 in one edit); legalCitation (Section 11) kept as plain text per requirements
+- [x] Global font/color improvements — `app/globals.css`: `html { font-size: 106.25% }` (17px base, scales all rem sizes); `--color-zinc-400` and `--color-zinc-500` remapped one step darker in `@theme`; `--muted-foreground` darkened from 55.6% to 40% lightness; affects all screens without component changes
+- [x] Bill document attachments — *next to implement (Phase 6 pulled forward)*
+
 **Remaining:**
-- [ ] TipTap rollout — wire `RichTextEditor` / `RichTextContent` to remaining Rich Text fields: Sections 2 (intentOfLegislation), 3 (summary), 4 (positionDetails), 6 (fiscal fields ×4), 7 (significantChanges), 8 (proArguments, conArguments), 9 (stakeholderPositions), 10 (background, problemBeingAddressed), 11 (legalCitation text — probably keep plain), 13 (finOpsReview)
-- [ ] **Collaborative real-time editing** — approach confirmed: Yjs + Hocuspocus WebSocket server (not attribution marks); requires `@tiptap/extension-collaboration`, `@tiptap/extension-collaboration-cursor`, Hocuspocus server deployed on Railway as a separate service; document room keyed by `billId + fieldName`
-- [ ] Audit trail — `AuditLog` model (does not yet exist in schema); log every field write with: `billAnalysisId`, `userId`, `field` (string), `oldValue`, `newValue`, `editedAt`; note: existing `voidedAt` on `ApprovalDecision` is approval history only, not a general audit trail; `lastModifiedById` on `BillAnalysis` is last-editor only, not a history
+- [ ] **Bill document attachments** ← next; pulled forward from Phase 6 — file upload to Railway Storage (AWS SDK v3), document list UI, mid-workflow primary document promotion, draft comparison link
+- [ ] **Audit trail** — `AuditLog` model (does not yet exist in schema); log every field write with: `billAnalysisId`, `userId`, `field` (string), `oldValue`, `newValue`, `editedAt`; note: existing `voidedAt` on `ApprovalDecision` is approval history only, not a general audit trail; `lastModifiedById` on `BillAnalysis` is last-editor only, not a history
 - [ ] Completion % calculation — system-calculated from required field fill rate; currently hardcoded to `0` on all records
 - [ ] Previous Department Review Reference — FK on `BillAnalysis` pointing to a prior LEGIS record:
   - Schema: `previousReviewId String?` FK → `BillAnalysis.id`; self-relation; needs migration
   - Clone action — LAI triggers "Copy from previous review" to pre-populate selected sections; once per record; confirmation prompt before overwriting
   - "View Prior Review" panel — side-by-side key fields; full chain traversable
+- [ ] **Collaborative real-time editing** — approach confirmed: Yjs + Hocuspocus WebSocket server (not attribution marks); requires `@tiptap/extension-collaboration`, `@tiptap/extension-collaboration-cursor`, Hocuspocus server deployed on Railway as a separate service; document room keyed by `billId + fieldName`
 
 ---
 
@@ -173,10 +179,11 @@ Sr. Deputy Director  — approves last for their path
 - ~~Admin UI: user management, role assignment, org structure management~~ — completed in Phase 3
 - ~~Section 12 conditional display (post-enrollment only)~~ — completed in Phase 2
 - ~~`OrgAdmin.tsx` Section type bug~~ — fixed 2026-05-23; `bureau` and `division` typed as `| null` to match Prisma query result (was blocking builds)
+- ~~Section 1 Priority field display bug~~ — fixed 2026-05-26; `Section1.tsx` now reads `bill.priority` and displays "Normal" / "Urgent"; `priority` added to `Section1Props` interface
+- ~~Global font/color improvements~~ — completed 2026-05-26 (see Phase 4)
 - **Dashboard** — currently a stub (shows username + roles only); build: bills awaiting the current user's action (pending decisions, awaiting APOC path setup, awaiting LAI review), counts by workflow status, recent activity
 - Emergency override controls (ADMIN role)
 - Bill list: search, filter by status / priority / assignee
-- **Section 1 Priority field display** — minor bug: `Section1.tsx` line 35 hardcodes `—` for Priority; should read `bill.priority` (field exists in schema and is set at creation)
 - Accessibility and responsive pass
 
 ---
@@ -186,17 +193,17 @@ Sr. Deputy Director  — approves last for their path
 ```
 Phase 1 ✅ → Phase 2 ✅ → Phase 3 ✅
                                     ↓
-                              Phase 4 (in progress — TipTap + real-time collab + audit trail + previous review)
+                              Phase 4 (in progress — bill attachments pulled forward, then audit trail + completion % + previous review + real-time collab)
                                     ↓
                               Phase 5 (email notifications)
                                     ↓
-                              Phase 6 (file attachments + PDF)
+                              Phase 6 (file attachments + PDF — bill attachments pulled into Phase 4)
                                     ↓
                               Phase 7 (polish + dashboard + minor bugs)
 ```
 
 Phases 5 and 6 can begin in parallel once Phase 4 is stable — email requires workflow events; PDF/file upload requires form data; neither blocks the other.
 
-**Phase 4 remaining order:** TipTap rollout to all remaining Rich Text fields → real-time collaborative editing (Yjs + Hocuspocus on Railway) → audit trail schema + logging → completion % → previous review reference (schema migration).
+**Phase 4 remaining order:** Bill document attachments (pulled forward from Phase 6) → audit trail schema + logging → completion % → previous review reference → real-time collaborative editing (Yjs + Hocuspocus on Railway — highest risk, do last).
 
 > **Key recommendation:** Spend extra design time on the approval path schema in Phase 2 before writing any Phase 3 UI. A wrong data model at that layer is expensive to unwind.
