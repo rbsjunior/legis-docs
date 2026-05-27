@@ -1,6 +1,6 @@
 # LEGIS — Technical Stack
 
-*Documented: 2026-05-01 — Updated: 2026-05-26 (session 7)*
+*Documented: 2026-05-01 — Updated: 2026-05-27 (session 9)*
 
 ---
 
@@ -111,15 +111,17 @@ The `ADMIN` role can be assigned to any user via the Users admin page (`/admin/u
 
 ## Email
 
-**Resend** + **React Email**
+**Nodemailer** + **Gmail SMTP** — implemented Phase 5
 
-- Railway-compatible, TypeScript-native SDK
-- React Email for templating all 6 auto-email types
+- `nodemailer` v7 with `smtp.gmail.com:587` (STARTTLS); auth via Gmail App Password (`GOOGLE_APP_PASSWORD`)
+- `GMAIL_USER` = sending Gmail address; display name set in Gmail account settings (Settings → Accounts → Send mail as)
+- `nodemailer` added to `serverExternalPackages` in `next.config.ts` to prevent webpack bundling
+- Fire-and-forget `void` pattern in Server Actions — email failures never block workflow transitions
+- HTML templates as pure TypeScript functions in `app/lib/emails/templates.ts`; no React Email dependency
+- `scripts/test-email.ts` verifies SMTP connection and sends a test message (`npm run email:test`)
+- Seed user emails use Gmail plus-addressing: `srbsjunior+{role}@gmail.com`
 
-**Inngest** (background job queue)
-
-- Wraps email sends in reliable, retryable jobs — critical for routing sheet and artifact delivery
-- Deploys as a Railway service; no separate Redis instance required
+> **Not used:** Resend, React Email, Inngest — Nodemailer + Gmail is sufficient for this internal low-volume app.
 
 ---
 
@@ -153,8 +155,7 @@ Next.js 15 (App Router)
   ├── shadcn/ui (Nova preset / @base-ui/react) + Tailwind CSS v4
   ├── Server Actions + useActionState + Zod (forms + validation — no React Hook Form)
   ├── TipTap (rich text — Phase 4)
-  ├── Resend + React Email (transactional email — Phase 5)
-  ├── Inngest (background job queue — Phase 5)
+  ├── Nodemailer + Gmail SMTP (transactional email — Phase 5)
   ├── Railway Storage + AWS SDK v3 (file uploads — implemented Phase 4)
   └── Puppeteer (server-side PDF generation — Phase 6)
 ```

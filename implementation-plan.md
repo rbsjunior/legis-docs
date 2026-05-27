@@ -1,6 +1,6 @@
 # LEGIS — Implementation Plan
 
-*Documented: 2026-05-01 — Last updated: 2026-05-26 (session 8)*
+*Documented: 2026-05-01 — Last updated: 2026-05-27 (session 9)*
 
 ---
 
@@ -129,29 +129,40 @@ Sr. Deputy Director  — approves last for their path
 - [x] Bill document attachments (Phase 6 pulled forward, 2026-05-26) — `BillDocument` model + migration applied; Railway Storage (S3-compatible, endpoint `t3.storageapi.dev`) via AWS SDK v3; accepted formats: PDF, HTML, plain text, Markdown, XML (up to 50 MB); file uploads via `POST /api/documents/upload` (Route Handler — no body size limit); signed download URLs via `GET /api/documents/[id]` (15-min expiry, access-gated by bill assignment); `removeDocument` + `setDocumentPrimary` Server Actions; `BillDocumentPanel` (Server Component) + `AddDocumentForm` (Client Component using `fetch`); first uploaded doc auto-becomes primary; LAI/APOC/ADMIN may add/remove/promote at any stage prior to executive lock; panel sits between BillHeader and WorkflowPanel on detail page; credentials in `.env.local` and Railway dashboard env vars
 - [x] Audit trail (2026-05-26) — `AuditLog` model (`billAnalysisId`, `userId`, `section Int?`, `field`, `oldValue`, `newValue`, `createdAt`); `section = null` for document events, `section 2–13` for section field edits; `diffFields()` helper diffs old/new values per-field — only logs changes (no no-op noise); all Sections 2–13 Server Actions in `app/actions/bills.ts` emit `auditLog.createMany()` in same `$transaction` as `billAnalysis.update()`; document events (upload, remove, set-primary) emit `auditLog.create()` in same `$transaction` as the document operation; `AuditLogPanel` Server Component (self-fetching, 200 logs newest-first) — collapsible `<details>/<summary>`; TipTap JSON fields displayed as extracted plain text (120-char preview); document events formatted as "Added / Removed / Set primary" with filename, MIME, size; panel mounted above Section 14 on detail page; migration `20260526040000` makes `section` nullable
 
+**Completed (2026-05-27):**
+- [x] Completion % calculation — `calcCompletionPct()` in `app/lib/completion.ts`; checks 4 required fields (intentOfLegislation, summary, leadAgencyPosition, positionDetails); called on every section save across all 13 sections and on clone; displayed in Section 14
+- [x] Previous Department Review Reference — `previousReviewId` self-FK on `BillAnalysis`; `versionNumber Int?` auto-assigned at creation; `PreviousReviewPanel` server component shown below Section 1; `CloneFromPreviousReview` client component (one-time clone with confirmation prompt, sections selectable); pre-fill at creation time (bill numbers, topic, sponsors, committee, bipartisan support, related bill numbers); version badge on bill header and list
+- [x] Seed email addresses updated — `xxx@legis.test` → `srbsjunior+xxx@gmail.com` across `scripts/seed-mdhhs.ts`
+
 **Remaining:**
-- [ ] Completion % calculation — system-calculated from required field fill rate; currently hardcoded to `0` on all records
-- [ ] Previous Department Review Reference — FK on `BillAnalysis` pointing to a prior LEGIS record:
-  - Schema: `previousReviewId String?` FK → `BillAnalysis.id`; self-relation; needs migration
-  - Clone action — LAI triggers "Copy from previous review" to pre-populate selected sections; once per record; confirmation prompt before overwriting
-  - "View Prior Review" panel — side-by-side key fields; full chain traversable
 - [ ] **Collaborative real-time editing** — approach confirmed: Yjs + Hocuspocus WebSocket server (not attribution marks); requires `@tiptap/extension-collaboration`, `@tiptap/extension-collaboration-cursor`, Hocuspocus server deployed on Railway as a separate service; document room keyed by `billId + fieldName`
 
 ---
 
-### Phase 5 — Email Notifications
+### Phase 5 — Email Notifications *(partially complete — 2026-05-27)*
 
-- Resend + React Email setup; Inngest job queue on Railway
-- All 6 auto-email triggers wired to workflow events:
+**Tech:** Nodemailer + Gmail SMTP (`smtp.gmail.com:587`, STARTTLS) — no Inngest or Resend; fire-and-forget `void` calls in Server Actions; email failures never block workflow transitions.
 
-| Trigger | Recipients |
-|---|---|
-| LAI submits record | APOC, Senior Deputies, LA Contact |
-| APOC creates approval path | APOC, LAI |
-| APOC triggers message to LAI | APOC, LAI |
-| LAI approves | Legislative Affairs Manager (routing sheet) |
-| Director approves | LAI |
-| LAI clicks "Email Artifacts" | TBD |
+**Env vars:** `GMAIL_USER` (sending address), `GOOGLE_APP_PASSWORD` (Gmail App Password from myaccount.google.com/apppasswords), `AUTH_URL` (used as base URL for record links).
+
+**Files:**
+- `app/lib/email.ts` — Nodemailer transporter + `sendEmail()` helper; skips silently if env vars unset
+- `app/lib/emails/templates.ts` — HTML template functions for all 5 implemented triggers; `BillEmailData` type
+- `app/lib/emails/notifications.ts` — per-trigger helpers (`notifyBillSubmitted`, etc.); fetch bill data + send; each wrapped in try/catch + console.error
+- `scripts/test-email.ts` — SMTP connection verify + test delivery; run with `npm run email:test [recipient]`
+
+**Completed (5 of 6 triggers):**
+
+| Trigger | Action | Recipients |
+|---|---|---|
+| LAI submits record | `submitBill` | APOC, LA Contact |
+| APOC creates approval paths | `createApprovalPaths` (initial only, not rebuild) | APOC, LAI |
+| APOC signals review complete | `signalReviewComplete` | APOC, LAI |
+| LAI approves | `laiApprove` | LA Contact |
+| Director approves | `recordDecision` (DIRECTOR + APPROVED) | LAI (creator) |
+
+**Remaining (deferred to Phase 6):**
+- [ ] "Email Artifacts" button — sends PDF analysis + routing sheet; requires PDF generation (Phase 6) before this can be implemented
 
 ---
 
@@ -163,7 +174,7 @@ Sr. Deputy Director  — approves last for their path
 - Bill draft comparison link: when two or more documents are present, construct comparison link using their public URLs (user-supplied URL or Railway Storage download URL); load comparison tool in new tab or embedded iframe (integration details TBD)
 - PDF bill analysis generation (Puppeteer — renders Next.js template server-side)
 - PDF routing sheet generation (Puppeteer)
-- "Email Artifacts" button — sends both PDFs via Inngest job
+- "Email Artifacts" button — sends both PDFs; trigger implemented in Phase 5 once PDFs exist
 - AI-assisted comparison *(low priority / future)*: generative AI produces plain-language synopsis of changes between two bill versions; surfaced as optional "Summarize Changes" alongside comparison link; depends on third-party tool maturity and LLM API selection
 
 ---
@@ -185,19 +196,15 @@ Sr. Deputy Director  — approves last for their path
 ## Sequencing
 
 ```
-Phase 1 ✅ → Phase 2 ✅ → Phase 3 ✅
-                                    ↓
-                              Phase 4 (in progress — bill attachments pulled forward, then audit trail + completion % + previous review + real-time collab)
-                                    ↓
-                              Phase 5 (email notifications)
-                                    ↓
-                              Phase 6 (file attachments + PDF — bill attachments pulled into Phase 4)
-                                    ↓
-                              Phase 7 (polish + dashboard + minor bugs)
+Phase 1 ✅ → Phase 2 ✅ → Phase 3 ✅ → Phase 4 ✅ (real-time collab deferred)
+                                                      ↓
+                                              Phase 5 ⬤ (5/6 triggers done; "Email Artifacts" waits on Phase 6 PDFs)
+                                                      ↓
+                                              Phase 6 (PDF generation + comparison links + "Email Artifacts" trigger)
+                                                      ↓
+                                              Phase 7 (polish + dashboard + minor bugs)
 ```
 
-Phases 5 and 6 can begin in parallel once Phase 4 is stable — email requires workflow events; PDF/file upload requires form data; neither blocks the other.
-
-**Phase 4 remaining order:** Completion % → previous review reference → real-time collaborative editing (Yjs + Hocuspocus on Railway — highest risk, do last).
+**Phase 4 deferred:** Real-time collaborative editing (Yjs + Hocuspocus on Railway) — highest risk, moved to after Phase 6.
 
 > **Key recommendation:** Spend extra design time on the approval path schema in Phase 2 before writing any Phase 3 UI. A wrong data model at that layer is expensive to unwind.

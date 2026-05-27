@@ -1,6 +1,6 @@
 # LEGIS — Legislative Affairs Bill Review System - test
 ## Requirements Document
-*Updated: 5/16/26 (session 2)*
+*Updated: 5/26/26 (session 5)*
 
 ---
 
@@ -133,25 +133,29 @@ All analyses require **COO** and **Director** approval. `CAO`, `HSD`, and `CME` 
 
 ### Previous Department Review Reference
 
-When a bill that was previously reviewed by the Department returns in a new or amended form, the new analysis record may be linked to the prior review. This provides continuity of institutional knowledge and avoids duplicating work already done.
+As a bill moves through the Legislature it may be heard and voted on multiple times. Each hearing or vote may require an updated Department analysis. Each version of the bill has a corresponding Department review record, and each subsequent review is linked to the prior one, forming a chain that preserves the full analysis history for that bill.
+
+**Bill versioning:**
+- Bill numbers remain constant throughout the legislative session. Each new Department review of the same bill represents a new version of the analysis, not a new bill.
+- Version numbers are assigned automatically (V1, V2, V3…) when the analyst opts in at record creation. The system reads the prior review's version number and increments it.
+- Version numbers are displayed as a badge on the bill header and in the bill analyses list.
 
 **Linking:**
 - A new bill analysis record may reference one prior LEGIS bill analysis record (the "previous review").
-- The link is set at creation time or any point during drafting by the LAI.
-- The referenced record does not need to be for the same bill number — it may point to a prior-session version, a predecessor bill, or a substantially similar bill.
+- The link is set at creation time (top of the New Analysis form) or at any point during drafting by the LAI.
+- At creation time, selecting a prior review automatically pre-fills: Bill Number(s), Topic/Title, Sponsors, Committee, Bipartisan Support, and Related Bill Numbers. The analyst reviews and may edit all pre-filled values before submitting.
 
 **Clone from previous review:**
-- LAI may trigger a "Copy from previous review" action that pre-populates selected sections of the new record with content from the referenced prior review.
-- Sections eligible for cloning (LAI selects which to copy): Summary, Intent of Legislation, Lead Agency Position, Position Details, Suggested Changes, Fiscal Impact, Background, Stakeholder Positions.
+- After record creation, the LAI may trigger a "Copy from Previous Review" action that pre-populates selected substantive sections with content from the linked prior review.
+- Sections eligible for cloning (LAI selects which to copy): Intent of Legislation, Summary, Lead Agency Position & Position Details, Suggested Changes, Fiscal / Economic Impact, Background & Problem Being Addressed, Stakeholder Positions.
 - Cloned content is treated as a starting draft — fully editable; the copy action does not lock or link the fields.
-- Section 1 (Header) and all system/workflow fields are never cloned.
 - The clone action can only be performed once per record; a confirmation prompt is shown before overwriting any existing content.
 
-**Review history comparison:**
-- On any bill analysis record that has a previous review linked, a "View Prior Review" panel or link is available to all users with record access.
-- The panel shows the prior record's key fields (Bill Number, Topic, Lead Agency Position, Summary, date of review) side by side with the current record for quick reference.
-- Full navigation to the prior record is available via a link.
-- If the prior record itself has a previous review linked, the full chain is traversable (each record links to its predecessor), enabling a complete history of Department reviews for a recurring bill.
+**Prior review panel:**
+- On any bill analysis record that has a previous review linked, a "Prior Review Reference" panel is displayed below Section 1 for all users with record access.
+- The panel shows the prior record's key fields (Bill Number, Topic, Lead Agency Position, and text excerpts of substantive sections) for quick reference.
+- The clone action is accessible directly from this panel (before the one-time clone has been used).
+- If the prior record itself has a previous review linked, the full chain is traversable via the previousReviewId self-reference on each record, enabling a complete history of Department reviews for a recurring bill.
 
 ---
 
@@ -211,7 +215,8 @@ If the bill is amended or substituted while department analysis is in progress, 
 | Date of Analysis / Update | Date | Yes | When analysis was last updated |
 | Reviewed By | List | No | Name + Department per reviewer |
 | Related Bill Numbers | String | No | Links to other related bill records |
-| Previous Review Reference | FK → BillAnalysis | No | Link to a prior LEGIS analysis record for the same or predecessor bill; enables clone and history comparison |
+| Previous Review Reference | FK → BillAnalysis | No | Link to a prior LEGIS analysis record for the same bill; set at creation (top of form, triggers pre-fill) or after creation by LAI; enables clone and history panel |
+| Version Number | Integer | No | Auto-assigned when "Auto-version" is selected at creation; displayed as badge on header and list |
 
 ### Section 2: Intent of Legislation
 
@@ -322,5 +327,7 @@ If the bill is amended or substituted while department analysis is in progress, 
 | Updated At | DateTime | Auto-updated on save |
 | Last Modified By | FK → User | Last editor |
 | Draft Status | Enum | DRAFT / SUBMITTED |
-| Completion % | Integer | 0–100, system-calculated |
+| Workflow Status | Enum | DRAFT / SUBMITTED / SME_REVIEW / LAI_REVIEW / EXECUTIVE_REVIEW / APPROVED / ENROLLED |
+| Completion % | Integer | 0–100, system-calculated from required fields (Intent, Summary, Lead Agency Position, Position Details) |
+| Version Number | Integer | Optional; auto-assigned at creation when analyst opts in; increments from the linked prior review's version number |
 | Priority | Enum | NORMAL / URGENT |
