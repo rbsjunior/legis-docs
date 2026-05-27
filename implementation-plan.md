@@ -1,6 +1,6 @@
 # LEGIS — Implementation Plan
 
-*Documented: 2026-05-01 — Last updated: 2026-05-27 (session 9)*
+*Documented: 2026-05-01 — Last updated: 2026-05-27 (session 10)*
 
 ---
 
@@ -26,7 +26,7 @@
 - [x] Next.js project scaffold — Next.js 15.5.18, Prisma 7.8.0, Tailwind 4, TypeScript
 - [x] Neon dev/prod branches wired — `DATABASE_URL` in `.env.local` (dev) and Railway env vars (prod); `prisma.config.ts` loads both `.env` and `.env.local` so migrations always hit dev branch locally
 - [x] DB schema: `User`, `Role` enum (12 roles), org hierarchy (`Administration`, `Bureau`, `Division`, `Section`) — migrated to Neon dev branch, Prisma client generated to `app/generated/prisma/client`
-- [x] NextAuth.js v5 — Credentials provider (email + password); `auth.config.ts` (Edge-safe, used by middleware) split from `auth.ts` (Node.js, has Prisma)
+- [x] NextAuth.js v5 — Credentials provider (username + password); `auth.config.ts` (Edge-safe, used by middleware) split from `auth.ts` (Node.js, has Prisma); login field is "User ID" (`username`), not email
 - [x] Role-based route middleware (`middleware.ts`) — redirects unauthenticated users to `/login`
 - [x] Layout shell and navigation (`app/(app)/layout.tsx`) — header with user name, role, sign-out
 - [x] Login/logout pages (`app/(auth)/login/`)
@@ -78,7 +78,7 @@
 - [x] `BillHeader` updated — Sr. Deputies sourced from `BillApprovalPath.srDeputy` (deduped); shown only after APOC builds approval paths
 - [x] Admin route guard — `middleware.ts` blocks `/admin/*` for non-ADMIN sessions; `app/(app)/admin/layout.tsx` enforces server-side; all `app/actions/admin.ts` actions re-check `requireAdmin()` independently
 - [x] Admin org management (`/admin/org`) — full CRUD for all four org levels: Administrations (with Sr. Deputy assignment), Bureaus (optional Administration parent), Divisions (optional Bureau parent — `bureauId: null` for standalone divisions like Legislative Affairs), Sections (Division parent via `divisionId` OR direct Bureau parent via `bureauId` — one required; admin page shows whichever parent exists); inline edit rows; delete blocked when org unit has referencing bill approval paths or assigned users
-- [x] Admin user management (`/admin/users`) — create/edit users with name, email, password (optional on edit), multi-role checkboxes (all 12 roles including ADMIN), org unit assignment (Administration / Bureau / Division / Section / None); activate/deactivate toggle; duplicate email blocked
+- [x] Admin user management (`/admin/users`) — create/edit users with name, email, User ID (username), password (optional on edit), multi-role checkboxes (all 12 roles including ADMIN), org unit assignment (Administration / Bureau / Division / Section / None); activate/deactivate toggle; duplicate email or username blocked; "User ID" column shown in user table
 - [x] Session staleness behavior documented — role changes (including ADMIN grant) take effect on next sign-in due to JWT caching; affected user must sign out and back in
 - [x] Sr. Deputy ordering gate — `recordDecision` blocks APPROVE for `SENIOR_DEPUTY` until all `BillSme` records on the same `BillApprovalPath` have APPROVED decisions; skipped when `srDeputyActsAsSme: true` (no sibling SMEs)
 - [x] Conditional approver ordering gate — `recordDecision` blocks APPROVE for `COO` until all required conditional approvers (CAO/HSD/CME per bill flags) have non-voided APPROVED decisions
@@ -133,6 +133,8 @@ Sr. Deputy Director  — approves last for their path
 - [x] Completion % calculation — `calcCompletionPct()` in `app/lib/completion.ts`; checks 4 required fields (intentOfLegislation, summary, leadAgencyPosition, positionDetails); called on every section save across all 13 sections and on clone; displayed in Section 14
 - [x] Previous Department Review Reference — `previousReviewId` self-FK on `BillAnalysis`; `versionNumber Int?` auto-assigned at creation; `PreviousReviewPanel` server component shown below Section 1; `CloneFromPreviousReview` client component (one-time clone with confirmation prompt, sections selectable); pre-fill at creation time (bill numbers, topic, sponsors, committee, bipartisan support, related bill numbers); version badge on bill header and list
 - [x] Seed email addresses updated — `xxx@legis.test` → `srbsjunior+xxx@gmail.com` across `scripts/seed-mdhhs.ts`
+- [x] Username login system (2026-05-27) — `User.username String? @unique`; migration `20260527000000_add_username`; login changed from email to username (`<lastname><firstinitial>`, clash resolution `<lastname><firstname><number>`); `makeUsername()` helper in seed scripts (handles titles: Dr., Mr., etc.); all 45 seed users assigned usernames; `auth.ts` Credentials provider switched to `username` field; login form label changed to "User ID"; admin user management shows/edits username; `update-emails-prod.ts` updated to also set usernames; `db:migrate` now runs `prisma generate` automatically after applying migrations; `db:reset` fixed to use `--full-reset` (drops entire schema via `DROP SCHEMA public CASCADE`) instead of broken `--clean` flag
+- [x] `scripts/migrate.ts` improvements — `extractPgCode()` recursively walks the Prisma 7 `P2010 → meta.driverAdapterError → cause` chain to find the raw PG error code (fixes idempotency for `42710 duplicate_object`, `42703 undefined_column`, etc.); partial-row cleanup (deletes stuck `finished_at IS NULL` rows before re-applying); `--full-reset` flag added
 
 **Remaining:**
 - [ ] **Collaborative real-time editing** — approach confirmed: Yjs + Hocuspocus WebSocket server (not attribution marks); requires `@tiptap/extension-collaboration`, `@tiptap/extension-collaboration-cursor`, Hocuspocus server deployed on Railway as a separate service; document room keyed by `billId + fieldName`

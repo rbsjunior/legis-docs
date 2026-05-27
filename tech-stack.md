@@ -1,6 +1,6 @@
 # LEGIS — Technical Stack
 
-*Documented: 2026-05-01 — Updated: 2026-05-27 (session 9)*
+*Documented: 2026-05-01 — Updated: 2026-05-27 (session 10)*
 
 ---
 
@@ -10,7 +10,7 @@
 |---|---|---|
 | Hosting | Railway | All services deployed here |
 | Database | Neon (managed PostgreSQL) | Pooled connection URL via `DATABASE_URL` |
-| Auth | NextAuth.js v5 — Credentials provider | Email + password; Entra ID deferred; `trustHost: true` set for Railway |
+| Auth | NextAuth.js v5 — Credentials provider | Username + password; login field is "User ID"; Entra ID deferred; `trustHost: true` set for Railway |
 | File Storage | Railway Storage (S3-compatible) | Bill draft uploads: PDF, HTML, markup |
 
 ---
@@ -37,6 +37,7 @@
 
 - Enums map directly to `DraftStatus`, `Priority`, `LeadAgencyPosition`, `ApprovalStatus`, `WorkflowStatus`, `ApprovalPathType`
 - **Multi-role:** `User.roles Role[]` (PostgreSQL array) — a user may hold multiple roles simultaneously; all role checks use `.some()` / `.includes()` against the array; JWT and session carry `roles: Role[]`
+- **Username login:** `User.username String? @unique` — login identifier is `<lastname><firstinitial>` (e.g. `burtonc`); clash resolved as `<lastname><firstname>` then `<lastname><firstname>2` etc.; `makeUsername()` helper in seed scripts handles titles (Dr., Mr., etc.); username set at seed time and editable in Admin → Users; login form field is labelled "User ID"
 - **Session staleness:** JWT tokens are cached for the session lifetime; role changes (e.g. granting ADMIN) do not take effect until the affected user signs out and back in
 - `BillSeniorDeputy` table removed — Sr. Deputies assigned exclusively by APOC via `BillApprovalPath.srDeputyId`; Sr. Deputy access derived from `ApprovalDecision` rows
 - Full org hierarchy: `Administration → Bureau → Division → Section`; users may be assigned to any single level; `User.sectionId` is nullable (Section is optional for all users); Section has `divisionId` (normal path) OR `bureauId` (directly under a bureau with no intermediate division); Division has `bureauId: null` for standalone divisions (e.g. Legislative Affairs reports to COO, not a bureau)
