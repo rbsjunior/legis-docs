@@ -187,7 +187,7 @@ Sr. Deputy Director  — approves last for their path
 ~~**Bill document attachments** — pulled into Phase 4; complete as of 2026-05-26~~
 
 **Comparison & PDF:**
-- Bill draft comparison link: when two or more documents are present, construct comparison link using their public URLs (user-supplied URL or Railway Storage download URL); load comparison tool in new tab or embedded iframe (integration details TBD)
+- [x] **Bill draft comparison — Draftable (2026-05-28)** — `app/lib/draftable.ts`: `createDraftableComparison()` POSTs to `https://api.draftable.com/v1/comparisons` via native `fetch` + `FormData`; `signedViewerUrl()` signs viewer URL with HMAC-SHA256 using Node.js `crypto` (no SDK dependency); `getDraftableFileType()` maps MIME type or URL extension to Draftable file type (PDF, Word, PPT, TXT); `draftableConfigured()` gates the UI on env var presence. `createComparison` Server Action in `app/actions/documents.ts`: access-checks, resolves Railway Storage presigned URLs or direct publicUrls, calls Draftable, returns 2-hour signed viewer URL. `CompareDocumentsForm` client component: two selects (left/right), Compare ↗ button opens viewer in new tab, inline error display. `BillDocumentPanel` renders compare form when ≥2 comparable docs exist. Env vars: `DRAFTABLE_ACCOUNT_ID` / `DRAFTABLE_AUTH_TOKEN` (prod); falls back to `DRAFTABLE_ACCOUNT_ID_TEST` / `DRAFTABLE_AUTH_TOKEN_TEST` (dev). No npm packages added — native fetch + crypto only.
 - PDF bill analysis generation (Puppeteer — renders Next.js template server-side)
 - PDF routing sheet generation (Puppeteer)
 - "Email Artifacts" button — sends both PDFs; trigger implemented in Phase 5 once PDFs exist

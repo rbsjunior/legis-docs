@@ -197,7 +197,7 @@ Each bill analysis record supports one or more attached bill documents. PDF is t
 
 **Document list display:** Each attached document shows label/filename, upload date, uploader name, and links for download (if file uploaded) and/or open URL (if URL provided).
 
-**Bill draft comparison:** Documents are passed to a third-party comparison tool by URL. When two or more documents are present on the record, the system constructs a comparison link using their public URLs — either the user-supplied public URL or the Railway Storage download URL for uploaded files. The comparison tool is loaded in-app (e.g. new tab or embedded iframe — integration details TBD).
+**Bill draft comparison:** When two or more supported documents are present on a record, a "Compare documents" control appears in the Bill Documents panel. The user selects a left and right document, clicks Compare, and the comparison opens in a new tab via the Draftable API. Supported formats: PDF, Word (docx/doc/rtf), PowerPoint, plain text. HTML, Markdown, and XML documents are excluded from the compare picker. Comparisons are private (signed viewer URL, 2-hour expiry). Uploaded files are passed to Draftable as presigned Railway Storage URLs; URL-only document entries use their public URL directly.
 
 **AI-assisted comparison *(low priority / future)*:** A future evolution will use a generative AI tool to compare two versions of a bill and produce a plain-language synopsis of the changes (e.g. "Section 3 removes the appropriation; Section 7 adds a new reporting requirement"). This will be surfaced as an optional "Summarize Changes" action alongside the existing comparison link. Implementation details TBD — depends on third-party comparison tool maturity and LLM API selection.
 

@@ -141,9 +141,9 @@ The `ADMIN` role can be assigned to any user via the Users admin page (`/admin/u
 | Need | Tool |
 |---|---|
 | Upload/retrieve bill drafts (PDF, HTML, markup) | Railway Storage via **AWS SDK v3** (S3-compatible API) — **implemented Phase 4** |
+| Bill draft comparison | **Draftable API** — REST API; no SDK; native `fetch` + Node.js `crypto` — **implemented Phase 6** |
 | Generate PDF bill analysis + routing sheet | **Puppeteer** — renders Next.js templates server-side to PDF |
 | Extract text from uploaded PDFs for diffing | **pdf-parse** |
-| Bill version comparison | Link out to external comparison tool (per requirements); integration point within the record |
 
 **Railway Storage implementation details (Phase 4):**
 - Endpoint: `https://t3.storageapi.dev` (Tigris-backed Railway Object Storage)
@@ -152,6 +152,15 @@ The `ADMIN` role can be assigned to any user via the Users admin page (`/admin/u
 - Downloads: `GET /api/documents/[id]` (generates 15-min presigned S3 URL, redirects browser; access-gated by bill assignment)
 - `app/lib/storage.ts` wraps `uploadFile` / `getDownloadUrl` / `deleteFile`
 - Accepted MIME types: `application/pdf`, `text/html`, `text/plain`, `text/markdown`, `application/xml`, `text/xml`
+
+**Draftable implementation details (Phase 6):**
+- REST API at `https://api.draftable.com/v1/comparisons` — no SDK; uses Node.js native `fetch` and `FormData`
+- Files submitted as `source_url` (Railway Storage presigned URL or direct public URL) — Draftable fetches them server-to-server; files never routed through LEGIS servers
+- Comparisons are private by default; viewer URLs signed with HMAC-SHA256 over `{account_id, identifier, valid_until}` using Node.js `crypto` module
+- Viewer URL expiry: 2 hours (comparison itself expires after 24 hours)
+- Supported formats: `pdf`, `docx`, `doc`, `rtf`, `txt`, `pptx`, `ppt` — HTML/Markdown/XML not supported; those docs are excluded from the compare picker
+- Env vars: `DRAFTABLE_ACCOUNT_ID` + `DRAFTABLE_AUTH_TOKEN` (prod/Railway); dev falls back to `DRAFTABLE_ACCOUNT_ID_TEST` + `DRAFTABLE_AUTH_TOKEN_TEST` (`.env.local`)
+- `app/lib/draftable.ts` — `createDraftableComparison()`, `signedViewerUrl()`, `getDraftableFileType()`, `draftableConfigured()`
 
 > **Note on Puppeteer:** Memory-intensive per render. If PDF generation volume grows, migrate to **React PDF** (pure JS, no headless browser) — requires building layouts manually.
 
@@ -168,5 +177,6 @@ Next.js 15 (App Router)
   ├── TipTap (rich text — Phase 4)
   ├── Nodemailer + Gmail SMTP (transactional email — Phase 5)
   ├── Railway Storage + AWS SDK v3 (file uploads — implemented Phase 4)
+  ├── Draftable API (document comparison — implemented Phase 6)
   └── Puppeteer (server-side PDF generation — Phase 6)
 ```
