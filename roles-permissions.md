@@ -107,6 +107,51 @@ Add / remove / promote documents: **LAI, APOC, ADMIN**, at any stage prior to th
 
 ---
 
+## SME Association — Disable / Re-enable
+
+Disabling an SME preserves their edit history, approval decisions, and connection to the bill review without deleting the `BillSme` row. A `disabledAt` timestamp marks the association inactive.
+
+| Stage | Who can disable / re-enable |
+|---|---|
+| DRAFT, SUBMITTED, SME_REVIEW, LAI_REVIEW | APOC (assigned to this bill), ADMIN |
+| EXECUTIVE_REVIEW | LAI, ADMIN — LAI retains full authority until all approvals are final |
+| APPROVED, ENROLLED | ADMIN only |
+
+- Disabled SMEs retain **read** access to the bill (their userId still appears in `BillSme`).
+- Disabled SMEs lose **edit** access.
+- Disabled SMEs are excluded from the Sr. Deputy ordering gate — the gate counts only active (`disabledAt IS NULL`) SMEs on the path.
+- Any existing `BillProxyAssignment` for a disabled SME is treated as inactive; proxy submission on their behalf is rejected.
+
+---
+
+## Proxy Approver — Scope and Assignment
+
+`PROXY_APPROVER` is a system role assigned in the admin panel. Any user may hold it alongside other roles.
+
+**Proxy scope: decisions only.** The proxy system covers `recordDecision` (approve/reject). It does **not** cover LAI or APOC workflow transition actions (submit, create paths, signal review complete, set exec approvers, LAI approve, mark enrolled). Those transitions require the named role holder or ADMIN.
+
+**Who can assign a proxy:** APOC (assigned to the bill), LAI (bill creator), or ADMIN — per-bill, per-original-approver. One proxy per original approver per bill; assigning a second proxy replaces the first.
+
+**What a proxy can do:** Submit an `ApprovalDecision` on behalf of any pending approver (SME, Sr. Deputy, COO, Director, CAO, HSD, CME). The decision records `approverId` = original and `proxyApproverId` = proxy (audit trail).
+
+**LAI / APOC absence:** Covered by the ADMIN bypass, not the proxy system. Extending proxy to workflow transitions creates a circular assignment problem (the unavailable party cannot assign their own proxy) and requires changes to every transition action separately.
+
+---
+
+## Historical Association Coverage
+
+| Source | What it reliably captures |
+|---|---|
+| `BillAnalysis.createdById` | Original LAI creator — never changes |
+| `BillSme` (incl. disabled rows) | All SMEs ever assigned to the bill |
+| `ApprovalDecision.approverId` | Everyone who ever had a formal decision requested (SMEs, Sr. Deputies, exec approvers, LAI) — rows are never deleted |
+| `ApprovalDecision.proxyApproverId` | Everyone who ever acted as proxy |
+| `AuditLog.userId` | Everyone who ever edited any field |
+
+**Gap:** If a single-person FK (APOC, LA Contact, exec approver) is replaced **before** that person generates any `ApprovalDecision` row, the only record of their earlier assignment is the `AuditLog` (indirect, edit-based). A `BillAssociationHistory` log table would close this gap cleanly.
+
+---
+
 ## Implementation notes
 
 - Role checks in the UI (button visibility, page redirects) are a convenience — **every sensitive action is re-checked server-side** in the relevant Server Action.

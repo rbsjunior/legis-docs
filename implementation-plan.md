@@ -195,6 +195,30 @@ Sr. Deputy Director  — approves last for their path
 
 ---
 
+## Known Gaps & Bugs (not yet scheduled)
+
+### Bug — Proxy users cannot see a bill before submitting their first decision
+**File:** `app/(app)/bills/page.tsx` and `app/(app)/bills/[id]/page.tsx`
+
+The scoped access check for non-LA roles queries:
+```typescript
+{ approvalDecisions: { some: { approverId: userId } } }
+```
+A proxy user's decisions record their ID in `proxyApproverId`, not `approverId`, so a proxy has no way to view the bill before submitting their first decision. The query must also include:
+```typescript
+{ proxyAssignments: { some: { proxyUserId: userId } } }
+```
+in both the bill list `where` clause and the detail page access check. The `docs/roles-permissions.md` bill list table documents this as if it works correctly — fix the code first, then verify the doc.
+
+---
+
+### Gap — No complete single-query history of everyone ever associated with a bill
+`ApprovalDecision` rows are never deleted and capture everyone who had a formal decision requested. Combined with `BillSme` (including disabled rows after the disable-SME feature) and `AuditLog`, a near-complete picture is achievable. The remaining blind spot: if a single-person FK (APOC, LA Contact, exec approver) is swapped **before** that person generates any `ApprovalDecision` row, the only evidence of their prior assignment is in `AuditLog` — indirect and edit-based.
+
+Clean fix when needed: a `BillAssociationHistory` log table that records every FK swap event (role, old user, new user, changed by, timestamp). Not urgent while APOC/exec approver changes remain rare.
+
+---
+
 ## Sequencing
 
 ```
