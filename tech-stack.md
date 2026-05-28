@@ -1,6 +1,6 @@
 # LEGIS — Technical Stack
 
-*Documented: 2026-05-01 — Updated: 2026-05-27 (session 10)*
+*Documented: 2026-05-01 — Updated: 2026-05-28 (session 12)*
 
 ---
 
@@ -64,6 +64,16 @@ shadcn is installed with the **`base-nova`** preset, which uses **`@base-ui/reac
 - `Button` uses `@base-ui/react/button`.
 - Tailwind CSS v4: CSS-first config — no `tailwind.config.js`; theme defined via `@theme inline` in `globals.css`; colors in oklch format.
 - `eslint-config-next` requires `.js` extension on ESM imports (`eslint-config-next/core-web-vitals.js`, not `eslint-config-next/core-web-vitals`).
+
+### URL-param driven filtering
+
+For read-only filtering/search (no mutation), URL search params are used instead of Server Actions:
+
+- A `"use client"` component reads current params via `useSearchParams()` and writes updates via `router.replace()` (not `router.push()` — avoids polluting browser history with every keystroke)
+- Text search is debounced 300 ms in a `useEffect` before the URL update fires
+- The server page receives `searchParams: Promise<{ [key: string]: string | undefined }>` (Next.js 15 — must be `await`ed before reading values)
+- Filter values are validated server-side against allow-lists before being passed to Prisma
+- Implemented: Bill list (`/bills`) — text search (bill number + topic icontains), status, priority
 
 ### Forms
 

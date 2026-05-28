@@ -115,6 +115,27 @@ All analyses require **COO** and **Director** approval. `CAO`, `HSD`, and `CME` 
 
 ---
 
+## Bill List View (`/bills`)
+
+All users see a bill list scoped to their role:
+
+| Role | Visible bills |
+|---|---|
+| ADMIN, LAI, APOC, LA_CONTACT | All bill analyses |
+| All other roles | Only bills they are assigned to (as APOC, LA Contact, SME, on an approval decision, or as proxy) |
+
+**Search and filter** — available to all users on their visible set:
+
+| Control | Behavior |
+|---|---|
+| Text search | Case-insensitive match against bill number(s) or topic/title |
+| Status filter | Single-select; any of the 7 workflow statuses |
+| Priority filter | All / Urgent / Normal |
+
+All three filters combine (AND). Result count displayed. Filters are URL-param driven and survive refresh. Empty state distinguishes "no bills exist" from "no bills match current filters."
+
+---
+
 ## Bill Analysis Record
 
 *Source: OHS Bill Analysis/Enrolled Bill Analysis Template (doc-page-1 through doc-page-4)*

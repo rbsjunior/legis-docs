@@ -204,7 +204,7 @@ Sr. Deputy Director  — approves last for their path
 - ~~Global font/color improvements~~ — completed 2026-05-26 (see Phase 4)
 - [x] **Dashboard** — three sections: "Awaiting Your Action" (role-scoped pending items: LAI drafts/LAI_REVIEW, APOC submitted, approver/proxy pending decisions; deduped by bill ID), "Bill Analyses" status count grid (7 statuses, scoped by role, each tile links to /bills), "Recent Activity" feed (capped at 5 entries per bill, up to 20 total; fetches 100 newest AuditLog rows then filters in JS to prevent one active bill from flooding the feed); all queries run in parallel; pure server component
 - Emergency override controls (ADMIN role)
-- Bill list: search, filter by status / priority / assignee
+- [x] **Bill list search & filter** — `BillFilters` client component (debounced text search, status select, priority select); URL-param driven so filters survive navigation and are shareable; `BillFilters` requires `<Suspense>` in Next.js 15 via the parent page; server-side Prisma `AND` combines access-scoping filter + `topic`/`billNumber` icontains search + status + priority; result count shown; empty state distinguishes "no bills" from "no match" (with clear-filters link); input values validated server-side before being passed to Prisma
 - Accessibility and responsive pass
 
 ---
