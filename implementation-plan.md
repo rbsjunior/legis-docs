@@ -202,7 +202,7 @@ Sr. Deputy Director  — approves last for their path
 - ~~`OrgAdmin.tsx` Section type bug~~ — fixed 2026-05-23; `bureau` and `division` typed as `| null` to match Prisma query result (was blocking builds)
 - ~~Section 1 Priority field display bug~~ — fixed 2026-05-26; `Section1.tsx` now reads `bill.priority` and displays "Normal" / "Urgent"; `priority` added to `Section1Props` interface
 - ~~Global font/color improvements~~ — completed 2026-05-26 (see Phase 4)
-- **Dashboard** — currently a stub (shows username + roles only); build: bills awaiting the current user's action (pending decisions, awaiting APOC path setup, awaiting LAI review), counts by workflow status, recent activity
+- [x] **Dashboard** — three sections: "Awaiting Your Action" (role-scoped pending items: LAI drafts/LAI_REVIEW, APOC submitted, approver/proxy pending decisions; deduped by bill ID), "Bill Analyses" status count grid (7 statuses, scoped by role, each tile links to /bills), "Recent Activity" feed (capped at 5 entries per bill, up to 20 total; fetches 100 newest AuditLog rows then filters in JS to prevent one active bill from flooding the feed); all queries run in parallel; pure server component
 - Emergency override controls (ADMIN role)
 - Bill list: search, filter by status / priority / assignee
 - Accessibility and responsive pass
