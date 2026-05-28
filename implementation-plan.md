@@ -1,6 +1,6 @@
 # LEGIS — Implementation Plan
 
-*Documented: 2026-05-01 — Last updated: 2026-05-27 (session 10)*
+*Documented: 2026-05-01 — Last updated: 2026-05-27 (session 11)*
 
 ---
 
@@ -129,6 +129,20 @@ Sr. Deputy Director  — approves last for their path
 - [x] Bill document attachments (Phase 6 pulled forward, 2026-05-26) — `BillDocument` model + migration applied; Railway Storage (S3-compatible, endpoint `t3.storageapi.dev`) via AWS SDK v3; accepted formats: PDF, HTML, plain text, Markdown, XML (up to 50 MB); file uploads via `POST /api/documents/upload` (Route Handler — no body size limit); signed download URLs via `GET /api/documents/[id]` (15-min expiry, access-gated by bill assignment); `removeDocument` + `setDocumentPrimary` Server Actions; `BillDocumentPanel` (Server Component) + `AddDocumentForm` (Client Component using `fetch`); first uploaded doc auto-becomes primary; LAI/APOC/ADMIN may add/remove/promote at any stage prior to executive lock; panel sits between BillHeader and WorkflowPanel on detail page; credentials in `.env.local` and Railway dashboard env vars
 - [x] Audit trail (2026-05-26) — `AuditLog` model (`billAnalysisId`, `userId`, `section Int?`, `field`, `oldValue`, `newValue`, `createdAt`); `section = null` for document events, `section 2–13` for section field edits; `diffFields()` helper diffs old/new values per-field — only logs changes (no no-op noise); all Sections 2–13 Server Actions in `app/actions/bills.ts` emit `auditLog.createMany()` in same `$transaction` as `billAnalysis.update()`; document events (upload, remove, set-primary) emit `auditLog.create()` in same `$transaction` as the document operation; `AuditLogPanel` Server Component (self-fetching, 200 logs newest-first) — collapsible `<details>/<summary>`; TipTap JSON fields displayed as extracted plain text (120-char preview); document events formatted as "Added / Removed / Set primary" with filename, MIME, size; panel mounted above Section 14 on detail page; migration `20260526040000` makes `section` nullable
 
+**Completed (2026-05-27, session 11):**
+- [x] **Disable / re-enable SME** — `disabledAt DateTime?` added to `BillSme` (migration `20260527010000_bill_sme_disabled_at`); `disableSme` and `enableSme` Server Actions in `workflow.ts`; shared `checkSmeManagePermission` helper enforces stage-gated permissions (APOC/ADMIN pre-exec, LAI/ADMIN during EXECUTIVE_REVIEW, ADMIN-only post-approval); `SmeActions.tsx` client component wraps buttons in `useTransition` (avoids Next.js form-action type mismatch); disabled SMEs retain read access but lose edit access (`editable` flag updated to `&& !s.disabledAt`); Sr. Deputy ordering gate (Gate 1) updated to count only active SMEs
+- [x] **Surgical per-path editing (Option B)** — replaces the destructive all-or-nothing `ApprovalPathBuilder` rebuild during live review; five new Server Actions in `workflow.ts`:
+  - `addSmeToPath` — upserts `BillSme` to an existing path; creates fresh PENDING `ApprovalDecision` only if none exists; re-enables previously disabled SME if found; flips `srDeputyActsAsSme: false` when a real SME is added
+  - `setSrDeputy` — voids outgoing Sr. Deputy decision (if any), updates `srDeputyId`, creates fresh PENDING `ApprovalDecision`
+  - `removeSrDeputy` — blocked if any active SME exists on the path; nulls `srDeputyId`, voids decision
+  - `addPath` — adds a single new `BillApprovalPath` without touching existing paths; order is `max(existing) + 1`; accepts full `PathInput` JSON (type, IDs, SMEs, Sr. Deputy)
+  - `removePath` — transaction: disable active `BillSme` rows, disconnect all `BillSme` FK, void SME and Sr. Deputy decisions, delete path
+- [x] `PathModifyControls.tsx` — per-path client component: Add SME dropdown (shows org-scoped candidates minus already-active), Sr. Deputy add/remove button (remove blocked when active SMEs present), Remove path with confirmation dialog; uses `useTransition` for pending state and inline error display
+- [x] `AddPathPanel.tsx` — client component rendered once below the path list; toggle open/closed; org unit selector with optgroups (Administrations, Standalone Bureaus, Standalone Divisions) filtered by `usedOrgKeys`; SME checkbox picker scoped to the selected org unit; auto-includes org Sr. Deputy with informational note; calls `addPath`
+- [x] `WorkflowPanel.tsx` updates — removed old `<details>` "Modify approval paths" rebuild block; `orgData` now fetched whenever `canManageSmes` (covers all stages, not just pre-EXECUTIVE_REVIEW + isApoc); `canManageSmes` flag controls visibility of Disable/Re-enable SME buttons, `PathModifyControls`, and `AddPathPanel`; `smesForPath` server-side helper computes org-scoped SME candidates per path (excludes org Sr. Deputy); `usedOrgKeys` excludes already-assigned org units from `AddPathPanel`; `createApprovalPaths` cleanup transaction updated to preserve disabled SME rows and their decisions on rebuild; upsert `update` clause sets `disabledAt: null` to auto-re-enable when APOC explicitly re-includes a previously disabled SME
+- [x] **Proxy access bug fix** — `bills/page.tsx` `WHERE` clause now includes `{ proxyAssignments: { some: { proxyUserId: userId } } }`; `bills/[id]/page.tsx` query fetches `proxyAssignments`, `hasAccess` check includes `bill.proxyAssignments.some(p => p.proxyUserId === userId)`; proxy users can now view a bill immediately upon assignment, before submitting any decision
+- [x] **ExecApproverSelector pre-population** — "Currently: [name]" label displayed above each exec approver dropdown during LAI_REVIEW; derived from existing `current.*ApproverId` props already passed to the component; display-only
+
 **Completed (2026-05-27):**
 - [x] Completion % calculation — `calcCompletionPct()` in `app/lib/completion.ts`; checks 4 required fields (intentOfLegislation, summary, leadAgencyPosition, positionDetails); called on every section save across all 13 sections and on clone; displayed in Section 14
 - [x] Previous Department Review Reference — `previousReviewId` self-FK on `BillAnalysis`; `versionNumber Int?` auto-assigned at creation; `PreviousReviewPanel` server component shown below Section 1; `CloneFromPreviousReview` client component (one-time clone with confirmation prompt, sections selectable); pre-fill at creation time (bill numbers, topic, sponsors, committee, bipartisan support, related bill numbers); version badge on bill header and list
@@ -197,18 +211,9 @@ Sr. Deputy Director  — approves last for their path
 
 ## Known Gaps & Bugs (not yet scheduled)
 
-### Bug — Proxy users cannot see a bill before submitting their first decision
-**File:** `app/(app)/bills/page.tsx` and `app/(app)/bills/[id]/page.tsx`
+### ~~Bug — Proxy users cannot see a bill before submitting their first decision~~ ✅ Fixed (session 11)
 
-The scoped access check for non-LA roles queries:
-```typescript
-{ approvalDecisions: { some: { approverId: userId } } }
-```
-A proxy user's decisions record their ID in `proxyApproverId`, not `approverId`, so a proxy has no way to view the bill before submitting their first decision. The query must also include:
-```typescript
-{ proxyAssignments: { some: { proxyUserId: userId } } }
-```
-in both the bill list `where` clause and the detail page access check. The `docs/roles-permissions.md` bill list table documents this as if it works correctly — fix the code first, then verify the doc.
+Both `bills/page.tsx` and `bills/[id]/page.tsx` now include `{ proxyAssignments: { some: { proxyUserId: userId } } }` in the access check. `roles-permissions.md` bill list table updated to reflect correct scoping.
 
 ---
 

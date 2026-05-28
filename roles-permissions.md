@@ -1,6 +1,6 @@
 # LEGIS — Roles & Permissions
 
-*Documented: 2026-05-27 (session 10)*
+*Documented: 2026-05-27 (session 10) — Updated: 2026-05-27 (session 11)*
 
 ---
 
@@ -30,7 +30,7 @@ A user may hold multiple roles simultaneously. Access rights are the union of al
 | Roles | What they see |
 |---|---|
 | ADMIN, LAI, APOC, LA_CONTACT | All bill analyses |
-| SME, SENIOR_DEPUTY, COO, DIRECTOR, CAO, HSD, CME, PROXY_APPROVER | Only bills they are assigned to (as APOC, LA Contact, SME, or have an `ApprovalDecision` row) |
+| SME, SENIOR_DEPUTY, COO, DIRECTOR, CAO, HSD, CME, PROXY_APPROVER | Only bills they are assigned to (as APOC, LA Contact, active or disabled SME, have an `ApprovalDecision` row, or are listed in `BillProxyAssignment`) |
 
 ---
 
@@ -59,7 +59,9 @@ A user may edit when **both** conditions are met:
 
 **Condition A — Assignment:**
 - Holds an LA role (ADMIN / LAI / APOC / LA_CONTACT), OR
-- Is the assigned APOC, LA Contact, SME, or Sr. Deputy on the bill
+- Is the assigned APOC, LA Contact, **active** SME (`disabledAt IS NULL`), or Sr. Deputy on the bill
+
+> Disabled SMEs (`disabledAt IS NOT NULL`) retain **read** access but lose edit access. Their `BillSme` row is preserved for history.
 
 **Condition B — Status lock:**
 - Bill status is DRAFT, SUBMITTED, SME_REVIEW, or LAI_REVIEW → any user satisfying Condition A may edit
@@ -73,16 +75,29 @@ A user may edit when **both** conditions are met:
 | Action | Permitted roles | Additional restriction |
 |---|---|---|
 | Submit bill (DRAFT → SUBMITTED) | LAI, ADMIN | Must be the bill creator (ADMIN bypasses) |
-| Create / rebuild approval paths (SUBMITTED → SME_REVIEW) | APOC, ADMIN | Must be the assigned APOC (ADMIN bypasses) |
+| Create approval paths (SUBMITTED → SME_REVIEW) | APOC, ADMIN | Must be the assigned APOC (ADMIN bypasses) |
 | Signal review complete (SME_REVIEW → LAI_REVIEW) | APOC, ADMIN | Must be the assigned APOC (ADMIN bypasses) |
 | Set executive approvers | APOC, LAI, ADMIN | Must be the assigned APOC or creator LAI (ADMIN bypasses) |
 | LAI approve (LAI_REVIEW → EXECUTIVE_REVIEW) | LAI, ADMIN | Must be the bill creator (ADMIN bypasses) |
 | Record decision (APPROVE / REJECT) | Assigned approver only | Proxy approver may submit on behalf of their assigned principal |
 | Mark enrolled (APPROVED → ENROLLED) | LAI, ADMIN | — |
 
+### Per-path editing actions (surgical — do not reset other paths)
+
+These actions modify individual paths without touching the rest of the approval chain. All are blocked at APPROVED/ENROLLED.
+
+| Action | Permitted roles |
+|---|---|
+| Add SME to an existing path | DRAFT–LAI_REVIEW: APOC, ADMIN · EXECUTIVE_REVIEW: LAI, ADMIN |
+| Remove Sr. Deputy from a path | Same as above · Blocked if any active SME exists on the path |
+| Add Sr. Deputy to a path | Same as above |
+| Add a new path | Same as above |
+| Remove a path | Same as above · Disables path's SMEs, voids all path decisions |
+| Disable / re-enable an SME | Same as above (see SME Association section below) |
+
 ### Approval ordering gates (enforced in `recordDecision`)
 
-1. **SENIOR_DEPUTY** cannot approve until all SMEs on the same path have APPROVED
+1. **SENIOR_DEPUTY** cannot approve until all **active** (`disabledAt IS NULL`) SMEs on the same path have APPROVED — disabled SMEs are excluded from this gate
 2. **COO** cannot approve until all required conditional approvers (CAO / HSD / CME) have APPROVED
 3. **DIRECTOR** cannot approve until the COO has APPROVED
 
