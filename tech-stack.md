@@ -142,7 +142,8 @@ The `ADMIN` role can be assigned to any user via the Users admin page (`/admin/u
 |---|---|
 | Upload/retrieve bill drafts (PDF, HTML, markup) | Railway Storage via **AWS SDK v3** (S3-compatible API) — **implemented Phase 4** |
 | Bill draft comparison | **Draftable API** — REST API; no SDK; native `fetch` + Node.js `crypto` — **implemented Phase 6** |
-| Generate PDF bill analysis + routing sheet | **Puppeteer** — renders Next.js templates server-side to PDF |
+| Generate PDF bill analysis | **React PDF (`@react-pdf/renderer`)** — pure JS, no Chromium, Railway-friendly — **implemented Phase 6** |
+| Generate PDF routing sheet | **React PDF** — remaining |
 | Extract text from uploaded PDFs for diffing | **pdf-parse** |
 
 **Railway Storage implementation details (Phase 4):**
@@ -162,7 +163,13 @@ The `ADMIN` role can be assigned to any user via the Users admin page (`/admin/u
 - Env vars: `DRAFTABLE_ACCOUNT_ID` + `DRAFTABLE_AUTH_TOKEN` (prod/Railway); dev falls back to `DRAFTABLE_ACCOUNT_ID_TEST` + `DRAFTABLE_AUTH_TOKEN_TEST` (`.env.local`)
 - `app/lib/draftable.ts` — `createDraftableComparison()`, `signedViewerUrl()`, `getDraftableFileType()`, `draftableConfigured()`
 
-> **Note on Puppeteer:** Memory-intensive per render. If PDF generation volume grows, migrate to **React PDF** (pure JS, no headless browser) — requires building layouts manually.
+**React PDF implementation details (Phase 6):**
+- `@react-pdf/renderer` — pure JavaScript PDF renderer; no Chromium, no native modules, no Railway config needed; added to `serverExternalPackages` in `next.config.ts`
+- Built-in PDF Type1 fonts used directly: `Times-Roman`, `Times-Bold`, `Times-Italic`, `Times-BoldItalic` — no font files to register or load
+- Template (`app/lib/pdf/bill-analysis.tsx`) matches MDHHS Word document layout: US Letter, 1" margins, Times-Roman 11pt body
+- `RichText` component converts TipTap JSON AST → React PDF elements (paragraphs, bullet/ordered lists, bold/italic); falls back to plain-text split for legacy pre-TipTap content
+- API route `GET /api/pdf/bill/[id]`: auth + same scoped access as bill detail page; `renderToBuffer` → `Uint8Array` → `NextResponse` with `Content-Disposition: attachment`
+- `PDF ↓` link in the bill list table links directly to the API route (plain `<a>`, not Next.js `<Link>`, since it streams a file not a page)
 
 ---
 
@@ -178,5 +185,5 @@ Next.js 15 (App Router)
   ├── Nodemailer + Gmail SMTP (transactional email — Phase 5)
   ├── Railway Storage + AWS SDK v3 (file uploads — implemented Phase 4)
   ├── Draftable API (document comparison — implemented Phase 6)
-  └── Puppeteer (server-side PDF generation — Phase 6)
+  └── React PDF / @react-pdf/renderer (bill analysis PDF — implemented Phase 6)
 ```
