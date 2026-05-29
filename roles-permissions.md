@@ -116,6 +116,33 @@ Triple-enforced: `middleware.ts` (Edge), `app/(app)/admin/layout.tsx` (server), 
 
 ---
 
+## Admin Override Controls
+
+Accessible via the amber "Admin override" collapsible in the WorkflowPanel on any bill detail page. Visible only to **ADMIN** users. All actions require a reason (≥10 characters) and a two-step confirmation. Every action writes two `AuditLog` rows: the field change and the reason.
+
+### Roll back status
+
+Moves a bill to any **earlier** workflow status, bypassing all gates. Forward moves are intentionally blocked — use normal workflow actions (which already bypass assignment checks for ADMIN) to advance a bill.
+
+| Target status | Additional behavior |
+|---|---|
+| Any earlier status | All non-voided decisions are voided |
+| `SME_REVIEW` | Fresh PENDING decisions created for all active SMEs and Sr. Deputies on existing approval paths |
+| `EXECUTIVE_REVIEW` | Fresh PENDING decisions created for all assigned executive approvers |
+| `DRAFT` | `draftStatus` also reset to DRAFT |
+
+Common use cases: Director rejected → roll back to `LAI_REVIEW` to restart exec review; wrong paths built → roll back to `SUBMITTED` so APOC can rebuild; accidental progression.
+
+### Reassign APOC
+
+Replaces the `apocId` FK on the bill. Validates that the new user is active and holds the APOC role. Available at any workflow stage — the only way to change APOC after a bill is created.
+
+### Void a specific decision
+
+Voids one non-voided decision (PENDING, APPROVED, or REJECTED) and immediately creates a fresh PENDING for the same approver and role. Does **not** change the bill's workflow status. More surgical than a full rollback when only one decision needs clearing (e.g. Director rejected due to a misunderstanding resolved the same day).
+
+---
+
 ## Document Uploads
 
 Add / remove / promote documents: **LAI, APOC, ADMIN**, at any stage prior to the executive lock (`EXECUTIVE_REVIEW` / `APPROVED` / `ENROLLED`).
