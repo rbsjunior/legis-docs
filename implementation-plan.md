@@ -211,6 +211,14 @@ Sr. Deputy Director  — approves last for their path
   - All three actions write two `AuditLog` rows: the field change (old → new value) + the admin reason; APOC query fetched conditionally (ADMIN sessions only) in `WorkflowPanel`
 - [x] **Bill list search & filter** — `BillFilters` client component (debounced text search, status select, priority select); URL-param driven so filters survive navigation and are shareable; `BillFilters` requires `<Suspense>` in Next.js 15 via the parent page; server-side Prisma `AND` combines access-scoping filter + `topic`/`billNumber` icontains search + status + priority; result count shown; empty state distinguishes "no bills" from "no match" (with clear-filters link); input values validated server-side before being passed to Prisma
 - [x] **Accessibility pass (2026-05-28)** — HIGH: `BillChangeNoticeForm` textarea now has `id`/`htmlFor` link, `aria-describedby` on error, `aria-busy` on submit; `DecisionForm` same treatment + focus rings on Approve/Reject buttons; `RichTextEditor` toolbar buttons get `aria-label`, `aria-pressed`, and `focus-visible:ring`; optional `ariaLabel` prop passed through to TipTap `contenteditable`. MEDIUM: `SimpleTextSection` adds `aria-live="polite"` success announcement after save, `ariaLabel` passed to editor; `bills/page.tsx` table headers all get `scope="col"`, empty Downloads `<th>` gets `sr-only` label.
+- [x] **Bug fixes (2026-05-29):**
+  - Dashboard "Awaiting Your Action" — `approverDecisions` query was gated on `isApprover` (role-based); any user can be added to an approval path regardless of role (e.g. ADMIN as SME), so gate removed; query now runs for all users unconditionally
+  - Dashboard — APOC missing "Signal SME review complete" action item; added `apocSmeReview` query for `SME_REVIEW` bills where `apocId === userId`
+  - Dashboard — LAI missing "Email artifacts to LA Contact" action item after Director approves; added `laiApproved` query for `APPROVED` bills where `createdById === userId`
+  - `signalReviewComplete` — gate counted disabled SME decisions as required approvals; now filters to active SMEs only (`BillSme.disabledAt IS NULL`) before checking all-approved; error message updated to "All active reviewers must approve"
+  - `adminDecisions` in `WorkflowPanel` — also included disabled SME decisions, causing `ReviewProgress` to show wrong count (e.g. "1 of 3" instead of "1 of 1"); now excludes decisions for disabled SMEs via `disabledSmeIds` set
+  - `ExecApproverSelector` — incorrectly shown to APOC during LAI_REVIEW; exec approver selection is LAI responsibility only; UI condition and `setExecApprovers` Server Action both restricted to LAI + ADMIN
+  - `BillHeader` — LAI (bill creator) was not shown in the header people row; added `createdBy` to `BillHeaderProps` and renders as "LAI:" first in the `<dl>`
 
 ---
 
@@ -219,6 +227,18 @@ Sr. Deputy Director  — approves last for their path
 ### ~~Bug — Proxy users cannot see a bill before submitting their first decision~~ ✅ Fixed (session 11)
 
 Both `bills/page.tsx` and `bills/[id]/page.tsx` now include `{ proxyAssignments: { some: { proxyUserId: userId } } }` in the access check. `roles-permissions.md` bill list table updated to reflect correct scoping.
+
+---
+
+### Gap — Mark Enrolled action and post-enrollment behavior needs end-to-end review *(flagged 2026-05-29)*
+
+`markEnrolled` exists (APPROVED → ENROLLED) and Section 12 conditional display is implemented, but the full post-enrollment flow has not been tested end-to-end. Review checklist:
+
+- `markEnrolled` Server Action in `app/actions/workflow.ts`
+- Section 12 fields (Vote Summary Senate/House, Admin Rules Impact, Technical Issues, Director Signature + Date) — editable only after ENROLLED
+- Whether any email notification is warranted on enrollment
+- Bill list, dashboard, and audit trail correctly reflect ENROLLED status
+- Email Artifacts button is available at ENROLLED — verify it works from that status too
 
 ---
 
