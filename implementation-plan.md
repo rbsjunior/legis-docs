@@ -155,7 +155,7 @@ Sr. Deputy Director  — approves last for their path
 
 ---
 
-### Phase 5 — Email Notifications *(partially complete — 2026-05-27)*
+### Phase 5 — Email Notifications *(5 of 6 triggers complete; "Email Artifacts" remaining)*
 
 **Tech:** Nodemailer + Gmail SMTP (`smtp.gmail.com:587`, STARTTLS) — no Inngest or Resend; fire-and-forget `void` calls in Server Actions; email failures never block workflow transitions.
 
@@ -163,11 +163,11 @@ Sr. Deputy Director  — approves last for their path
 
 **Files:**
 - `app/lib/email.ts` — Nodemailer transporter + `sendEmail()` helper; skips silently if env vars unset
-- `app/lib/emails/templates.ts` — HTML template functions for all 5 implemented triggers; `BillEmailData` type
+- `app/lib/emails/templates.ts` — HTML template functions for all implemented triggers; `BillEmailData` type
 - `app/lib/emails/notifications.ts` — per-trigger helpers (`notifyBillSubmitted`, etc.); fetch bill data + send; each wrapped in try/catch + console.error
 - `scripts/test-email.ts` — SMTP connection verify + test delivery; run with `npm run email:test [recipient]`
 
-**Completed (5 of 6 triggers):**
+**Completed (2026-05-28):**
 
 | Trigger | Action | Recipients |
 |---|---|---|
@@ -176,9 +176,10 @@ Sr. Deputy Director  — approves last for their path
 | APOC signals review complete | `signalReviewComplete` | APOC, LAI |
 | LAI approves | `laiApprove` | LA Contact |
 | Director approves | `recordDecision` (DIRECTOR + APPROVED) | LAI (creator) |
+| Bill text changed mid-workflow | `recordBillChange` | APOC + all active SMEs (disabledAt IS NULL) + Sr. Deputies across all approval paths; deduplicated; amber "Change notice" banner with LAI's comment |
 
-**Remaining (deferred to Phase 6):**
-- [ ] "Email Artifacts" button — sends PDF analysis + routing sheet; requires PDF generation (Phase 6) before this can be implemented
+**Remaining:**
+- [ ] "Email Artifacts" button — sends PDF analysis + routing sheet; both PDFs are done; this is the last unimplemented trigger
 
 ---
 
