@@ -1,6 +1,6 @@
 # LEGIS — Implementation Plan
 
-*Documented: 2026-05-01 — Last updated: 2026-05-27 (session 11)*
+*Documented: 2026-05-01 — Last updated: 2026-05-29 (session 12)*
 
 ---
 
@@ -219,6 +219,7 @@ Sr. Deputy Director  — approves last for their path
   - `adminDecisions` in `WorkflowPanel` — also included disabled SME decisions, causing `ReviewProgress` to show wrong count (e.g. "1 of 3" instead of "1 of 1"); now excludes decisions for disabled SMEs via `disabledSmeIds` set
   - `ExecApproverSelector` — incorrectly shown to APOC during LAI_REVIEW; exec approver selection is LAI responsibility only; UI condition and `setExecApprovers` Server Action both restricted to LAI + ADMIN
   - `BillHeader` — LAI (bill creator) was not shown in the header people row; added `createdBy` to `BillHeaderProps` and renders as "LAI:" first in the `<dl>`
+  - COO bill access — verified working (2026-05-29); COO gains access when `laiApprove` creates their `ApprovalDecision` row on transition to EXECUTIVE_REVIEW; no code change needed
 
 ---
 
