@@ -210,7 +210,7 @@ Sr. Deputy Director  — approves last for their path
   - `adminVoidDecision(billId, decisionId, reason)` — voids one specific non-voided decision (PENDING / APPROVED / REJECTED) and creates a fresh PENDING for the same approver+role without touching other decisions or bill status; surgical alternative to full rollback when only one rejection needs clearing
   - All three actions write two `AuditLog` rows: the field change (old → new value) + the admin reason; APOC query fetched conditionally (ADMIN sessions only) in `WorkflowPanel`
 - [x] **Bill list search & filter** — `BillFilters` client component (debounced text search, status select, priority select); URL-param driven so filters survive navigation and are shareable; `BillFilters` requires `<Suspense>` in Next.js 15 via the parent page; server-side Prisma `AND` combines access-scoping filter + `topic`/`billNumber` icontains search + status + priority; result count shown; empty state distinguishes "no bills" from "no match" (with clear-filters link); input values validated server-side before being passed to Prisma
-- Accessibility and responsive pass
+- [x] **Accessibility pass (2026-05-28)** — HIGH: `BillChangeNoticeForm` textarea now has `id`/`htmlFor` link, `aria-describedby` on error, `aria-busy` on submit; `DecisionForm` same treatment + focus rings on Approve/Reject buttons; `RichTextEditor` toolbar buttons get `aria-label`, `aria-pressed`, and `focus-visible:ring`; optional `ariaLabel` prop passed through to TipTap `contenteditable`. MEDIUM: `SimpleTextSection` adds `aria-live="polite"` success announcement after save, `ariaLabel` passed to editor; `bills/page.tsx` table headers all get `scope="col"`, empty Downloads `<th>` gets `sr-only` label.
 
 ---
 
