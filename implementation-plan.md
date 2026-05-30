@@ -1,6 +1,6 @@
 # LEGIS — Implementation Plan
 
-*Documented: 2026-05-01 — Last updated: 2026-05-29 (session 12)*
+*Documented: 2026-05-01 — Last updated: 2026-05-30 (session 13)*
 
 ---
 
@@ -250,6 +250,42 @@ Clean fix when needed: a `BillAssociationHistory` log table that records every F
 
 ---
 
+### Phase 8 — Testing *(in progress)*
+
+**Stack:** Vitest 4.x (integration), Playwright (E2E — not started)
+
+**Infrastructure (2026-05-30):**
+- [x] `vitest.config.ts` — node environment, `fileParallelism: false` (sequential), `clearMocks: true`, `@/*` alias wired
+- [x] `tests/global-setup.ts` — loads `.env` + `.env.local` before workers start so Prisma gets `DATABASE_URL`
+- [x] `tests/helpers/session.ts` — `makeSession()` returns the session shape actions read from `auth()`
+- [x] `tests/helpers/factory.ts` — `createWorld()` creates 10 users + org units with cleanup; `buildBillAt(world, status)` advances a bill to any workflow state via direct DB writes (bypasses auth checks)
+
+**Workflow integration tests (2026-05-30) — 46 tests, all passing:**
+- [x] `tests/workflow/lifecycle.test.ts` — 10 tests walking full DRAFT → ENROLLED happy path; verifies DB state at every step including auto-advance to APPROVED
+- [x] `tests/workflow/gates.test.ts` — 9 tests: Gate 1 (Sr. Deputy ordering), Gate 2 (COO/conditional approver ordering), Gate 3 (Director/COO ordering), `signalReviewComplete` blocking, disabled-SME exclusion from all gates
+- [x] `tests/workflow/permissions.test.ts` — 27 tests: role enforcement (unauthenticated, wrong role, wrong assignee, wrong status) across `submitBill`, `createApprovalPaths`, `signalReviewComplete`, `setExecApprovers`, `laiApprove`, `recordDecision`, `markEnrolled`, `recordBillChange`
+
+**Run:** `npm test` (single run) · `npm run test:watch` (watch mode)
+
+**Mocking pattern:** `auth`, `next/cache`, all email notifications mocked per test file via `vi.mock`. Each test sets session explicitly: `vi.mocked(auth).mockResolvedValue(makeSession(user) as any)`. Real Neon dev DB — no Prisma mocking.
+
+**Remaining within workflow integration tests (category 1):**
+- [ ] Proxy assignment + proxied approval (`assignProxy`, proxy submitting via `recordDecision`)
+- [ ] Audit log entry verification on section saves and workflow actions
+- [ ] Admin override actions (`adminForceStatus`, `adminReassignApoc`, `adminVoidDecision`)
+- [ ] Surgical path editing (`addSmeToPath`, `setSrDeputy`, `removeSrDeputy`, `addPath`, `removePath`)
+- [ ] Disable/re-enable SME (`disableSme`, `enableSme`) beyond incidental gate coverage
+- [ ] Bill section saves (`updateBill` — approval invalidation on edit, completion %)
+- [ ] Bill creation (`createBill`) — package bills, previous review linking, version numbers
+
+**Remaining other categories:**
+- [ ] E2E critical role paths (Playwright) — role-based UI differences, multi-step approval flow through browser
+- [ ] Admin action integration tests (`actions/admin.ts`) — user CRUD, org hierarchy, role assignment
+- [ ] API route integration tests — `/api/documents/upload`, `/api/documents/[id]`, `/api/pdf/bill/[id]`
+- [ ] Zod schema unit tests, auth/middleware unit tests, staging smoke tests
+
+---
+
 ## Sequencing
 
 ```
@@ -259,7 +295,9 @@ Phase 1 ✅ → Phase 2 ✅ → Phase 3 ✅ → Phase 4 ✅ (real-time collab de
                                                       ↓
                                               Phase 6 (PDF generation + comparison links + "Email Artifacts" trigger)
                                                       ↓
-                                              Phase 7 (polish + dashboard + minor bugs)
+                                              Phase 7 ✅ (polish + dashboard + bug fixes)
+                                                      ↓
+                                              Phase 8 ⬤ (testing — workflow integration done; E2E + admin + API routes remaining)
 ```
 
 **Phase 4 deferred:** Real-time collaborative editing (Yjs + Hocuspocus on Railway) — highest risk, moved to after Phase 6.

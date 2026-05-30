@@ -24,7 +24,7 @@ LEGIS is a domain-heavy application whose core value lives in the bill approval 
 
 ## Value-to-Effort Ranking
 
-### 1. Workflow Integration Tests — *Critical value, High effort, High complexity*
+### 1. Workflow Integration Tests — *Critical value, High effort, High complexity* ✅ Complete (2026-05-30)
 
 **What:** Test `actions/workflow.ts` and `actions/bills.ts` directly against a real Neon branch database.
 
@@ -38,7 +38,18 @@ LEGIS is a domain-heavy application whose core value lives in the bill approval 
 - Audit log entry creation on every workflow action
 - Concurrent approval scenarios
 
-**Infrastructure needed:** Neon branch per CI run, seed factory (see below).
+**Implemented so far (2026-05-30):** 46 tests across 3 files — `lifecycle.test.ts` (happy path), `gates.test.ts` (ordering gates), `permissions.test.ts` (role enforcement). All passing against Neon dev branch.
+
+**Infrastructure:** `tests/helpers/factory.ts` — `createWorld()` + `buildBillAt(world, status)`. Vitest 4.x, `fileParallelism: false`, real Neon DB, mocks only `auth` / `next/cache` / email notifications.
+
+**Remaining within category 1:**
+- Proxy assignment and proxied approval behavior (`assignProxy`, proxy submitting via `recordDecision`)
+- Audit log entry creation on section saves and workflow actions
+- Admin override actions (`adminForceStatus`, `adminReassignApoc`, `adminVoidDecision`)
+- Surgical path editing (`addSmeToPath`, `setSrDeputy`, `removeSrDeputy`, `addPath`, `removePath`)
+- Disable/re-enable SME (`disableSme`, `enableSme`) beyond incidental coverage in gates tests
+- Bill section saves (`updateBill` — approval invalidation on edit, completion % calculation)
+- Bill creation (`createBill`) — package bills, previous review linking, version number auto-assign
 
 ---
 
