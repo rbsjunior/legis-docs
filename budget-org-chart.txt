@@ -1,0 +1,192 @@
+MDHHS — BUREAU OF BUDGET (D3000) & BUREAU OF AUDIT (D7000) ORG CHART
+Date: 02/05/2026 | Pages 173-177 of 395
+
+================================================================================
+HIERARCHY — SHARED PARENT
+================================================================================
+
+[D1000] FINANCIAL OPERATIONS ADMINISTRATION
+  Position ID: SENDPDIRB29N
+  Name: Amy Epkey
+  Title: Senior Deputy Director
+  Ref: 1L
+  │
+  └── [D3000] BUREAU OF BUDGET
+        Position ID: SENMGEXCB29N
+        Name: Erik Eklund
+        Title: Senior Mgt. Executive
+        Ref: 2CBL
+        │
+        └── [D3000] BUREAU OF BUDGET
+              Position ID: BUREAADMC81N
+              Name: Vacant
+              Title: State Bureau Admin.
+              │
+              ├── [D3300] PUBLIC HEALTH SERVICES – BUDGET DIVISION  ──────────────── (Page 173)
+              │     Position ID: STDIVADMH26N
+              │     Name: Matthew Krysiak
+              │     Title: State Division Admin.
+              │     Ref: 3FJ
+              │     │
+              │     ├── [D3040] PROTECTION, ASSESSMENT, & SURVEILLANCE SERVICES SECTION (Ref: 4FF)
+              │     │     Position ID: STDDADM1A05N
+              │     │     Name: Damon Benford
+              │     │     Title: SAM
+              │     │     │
+              │     │     ├── FINSPL2B87N | Vacant | Financial Specialist
+              │     │     ├── FINCALTAE32N | Kidest Moges | Financial Analyst
+              │     │     ├── FINCALTAC91N | Vacant | Financial Analyst
+              │     │     ├── FINCALTEF69N | Vacant | Financial Analyst
+              │     │     ├── FINCALTAF25N | Collin Bajko | Financial Analyst
+              │     │     └── DPTLTCHEE15N | Vacant | Departmental Tech.
+              │     │
+              │     └── [D3070] LOCAL & FAMILY HEALTH SERVICES SECTION (Ref: 4VJ)
+              │           Position ID: STDDADM1T83N
+              │           Name: Erika Gerkman
+              │           Title: SAM
+              │           │
+              │           ├── FINSPL3A74N | Hemangini Malavia | Financial Specialist
+              │           ├── FINCALTAD84N | Brice Dawson | Financial Analyst
+              │           ├── FINCALTEF68N | Brianna Frost | Financial Analyst
+              │           └── FINCALTAF18N | Vacant | Financial Analyst
+              │
+              ├── [D3100] HUMAN SERVICES – BUDGET DIVISION  ──────────────────────── (Page 175)
+              │     Position ID: STDIVADMH35N
+              │     Name: Louis Long
+              │     Title: State Division Admin.
+              │     Ref: 3LR
+              │     │
+              │     ├── DEPSPL2C69N | Joann Dowker | Departmental Specialist
+              │     │
+              │     ├── [D3130] CHILDREN'S SERVICES ADMINISTRATION SECTION (Ref: 4FH)
+              │     │     Position ID: STDDADM1P29N
+              │     │     Name: Matthew Deaton
+              │     │     Title: SAM
+              │     │     │
+              │     │     ├── FINSPL3A64N | Jensine Garza | Financial Specialist
+              │     │     └── FINCALTEF73N | Jazmyn Nimke | Financial Analyst
+              │     │
+              │     └── [D3150] ECONOMIC STABILITY ADMINISTRATION SECTION (Ref: 4VU)
+              │           Position ID: STDDADM1U86N
+              │           Name: Tyler Bishop
+              │           Title: SAM
+              │           │
+              │           ├── FINCALTEF95N | Blake Opie | Financial Analyst
+              │           └── FINCALTAE63N | Adam Burkitt | Financial Analyst
+              │
+              ├── [D3200] INFORMATION TECHNOLOGY AND ADMINISTRATION DIVISION  ────── (Page 176)
+              │     Position ID: STDIVADMH25N
+              │     Name: Jeremy Phillips
+              │     Title: State Division Admin.
+              │     Ref: 3MY
+              │     │
+              │     ├── EXCSECEI81N | Amy Abrey | Executive Secretary
+              │     │
+              │     ├── [D3120] HHS INFORMATION TECHNOLOGY SECTION (Ref: 4FG)
+              │     │     Position ID: STDDADM1L81N
+              │     │     Name: Shawna Foster
+              │     │     Title: SAM
+              │     │     │
+              │     │     ├── FINSPL2C27N | Derek Nutter | Financial Specialist
+              │     │     └── FINCALTEE64N | Anthony Bowers | Financial Analyst
+              │     │
+              │     └── [D3140] ADMINISTRATION SECTION (Ref: 4TA)
+              │           Name: Jeffery Sanford
+              │           Title: SAM
+              │           (Note: No Position ID visible in source)
+              │           │
+              │           ├── FINSPL3A90N | Andrew Svihra | Financial Specialist
+              │           ├── FINCALTAF13N | Wail Elias | Financial Analyst
+              │           └── FINCALTAF14N | Eric Vandervest | Financial Analyst
+              │
+              └── [D3400] HEALTH CARE & AGING SERVICES – BUDGET DIVISION  ─────────  (Page 177)
+                    Position ID: STDIVADMI15N
+                    Name: Eric Houghtaling
+                    Title: State Division Admin.
+                    Ref: 3PH
+                    │
+                    ├── [D3030] MEDICAL SERVICES ADMINISTRATION SECTION (Ref: 4FE)
+                    │     Position ID: STDDADM1B56N
+                    │     Name: Kelly Wilcox
+                    │     Title: SAM
+                    │     │
+                    │     ├── FINCALTEE97N | Shunkea Brown / Vacant | Financial Analyst
+                    │     ├── FINCALTAE57N | Thanh Bui | Financial Analyst
+                    │     ├── FINSPL2C62N | Chessie Sergey | Financial Specialist
+                    │     ├── FINSPL3A85N | Keith Andrykovich | Financial Specialist
+                    │     └── FINSPL2C33N | Kevin Leininger | Financial Specialist
+                    │
+                    └── [D3020] BEHAVIORAL HEALTH ADMINISTRATION SECTION (Ref: 4FD)
+                          Position ID: STDDADM1B69N
+                          Name: Audrey Dick
+                          Title: SAM
+                          │
+                          ├── FINSPL3A93N | Ernest Papke | Financial Specialist
+                          ├── FINSPL2C86N | Tracey Walczak | Financial Specialist
+                          ├── FINCALTEE94N | Nicole Walworth | Financial Analyst
+                          └── FINSPL2B89N | William Baldry | Financial Specialist
+
+
+================================================================================
+BUREAU OF AUDIT (D7000) — SEPARATE BRANCH  ─────────────────────────────────── (Page 174)
+================================================================================
+
+[D7000] BUREAU OF AUDIT
+  Position ID: SENMGEXCB28N
+  Name: Shannah Havens
+  Title: Senior Mgt. Executive
+  Ref: 2CAL
+  │
+  └── [D7400] AUDIT DIVISION
+        Position ID: STDIVADMG65N
+        Name: Bryce Wooton
+        Title: State Division Admin.
+        Ref: 3LM
+        │
+        ├── AUDSPL3A47N | Dilcia Renderos | Auditing Specialist
+        │
+        ├── [D7410] PUBLIC HEALTH & COMMSERV PROGRAM AUDIT SECTION (Ref: 4QS)
+        │     Position ID: STDDADM1O16N
+        │     Name: Beth Kinney
+        │     Title: SAM
+        │     │
+        │     ├── AUDITOREE13N | Jackie Castillo | Auditor
+        │     ├── AUDITORAF88N | Tahmima Choudhury | Auditor
+        │     ├── AUDORED22N | Rebecca Bartley | Auditor
+        │     ├── AUDITORAD61N | Vacant | Auditor
+        │     └── AUDITORAG80N | Tanner Balius | Auditor
+        │
+        ├── [D7430] YOUTH SERVICES PROGRAM AUDIT SECTION (Ref: 4QQ)
+        │     Position ID: STDDADM1R65N
+        │     Name: Tracie Bonner
+        │     Title: SAM
+        │     │
+        │     ├── CCF Audit Unit
+        │     │     ├── AUDITORAG53N | Dana Dowd-Licari | Auditor
+        │     │     └── AUDITORED79N | LaTrisha Chilton / Neal Roberts | Auditor
+        │     │
+        │     └── School Services Program Audit Unit
+        │           ├── AUDITORAG46N | Cheryl Miller | Auditor
+        │           └── AUDITORAG36N | Kimberly Maharaj | Auditor
+        │
+        └── [D7440] WIC & FAMILY PLANNING AUDIT (Ref: 4TU)
+              Position ID: AUDTMGR3B09N
+              Name: Eric McGaugh
+              Title: Auditor Mgr.
+              │
+              ├── AUDITORED36N | Jordann Gleaves | Auditor
+              ├── AUDITORAG34N | Robert Fay | Auditor
+              └── AUDITORAG60N | Erin Derubeis | Auditor
+
+
+================================================================================
+NOTES
+================================================================================
+- SAM = State Administrative Manager
+- SDA = State Division Admin.
+- D3000 appears twice: once for Senior Mgt. Executive (Erik Eklund) and once for
+  State Bureau Admin. (Vacant) — both share the same dept. code, stacked in hierarchy
+- FINCALTEE97N lists two entries (Shunkea Brown / Vacant) — likely shared/transitional
+- AUDITORED79N lists two auditors (LaTrisha Chilton / Neal Roberts) — many-to-one box
+- Ref codes (3FJ, 4FF, 3LR, etc.) = cross-reference connectors to other pages
+- Vacant positions explicitly noted throughout

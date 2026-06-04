@@ -1,0 +1,46 @@
+MDHHS — LEGISLATIVE AFFAIRS (LG000) ORG CHART
+Source: Image upload | Date context: 02/05/2026
+
+================================================================================
+HIERARCHY
+================================================================================
+
+[A3000] CHIEF OPERATING OFFICER
+  Position ID: SPLAPTEEE34N
+  Name: David Knezek*
+  Title: Chief Operating Officer
+  Ref: 1B
+  │
+  └── [LG000] LEGISLATIVE AFFAIRS
+        Position ID: STOFCADME75N
+        Name: Chardae Burton
+        Title: State Office Admin.
+        Ref: 2AWG
+        │
+        ├── EXCSECEI54N | Jackie McKee | Executive Secretary
+        ├── STUDASTEL83N | Vacant | Student Assistant
+        │
+        ├── [LG010] LEGISLATIVE AFFAIRS (Ref: 3AY)
+        │     Position ID: STDDADM1M61N
+        │     Name: Jeffrey Spitzley
+        │     Title: SAM
+        │     │
+        │     ├── DEPTALTAP15Y | Marina Wyrzykowski | Dept. Analyst
+        │     ├── DEPTALTAP16Y | Mary Imre | Dept. Analyst
+        │     └── DEPTALTAP53Y | Nicholas Rossow | Dept. Analyst
+        │
+        └── [LG020] LEGISLATIVE CONSTITUENT SERVICES SECTION (Ref: 3NA)
+              Position ID: STDDADM1S76N
+              Name: Lesley Keyton
+              Title: SAM
+              │
+              ├── DEPTALTAP13Y | Caryn Shannon | Dept. Analyst
+              └── DEPTALTEP59Y | Elaine Heckman / Nicole Nelson | Dept. Analyst
+
+
+================================================================================
+NOTES
+================================================================================
+- * = Appears on more than one org chart page
+- SAM = State Administrative Manager
+- Many-to-one box: DEPTALTEP59Y lists two employees (Heckman / Nelson)

@@ -1,0 +1,207 @@
+DHHS STRATEGIC INTEGRATION ADMIN (SIA) - ORG CHART
+Date: 02/05/2026 | Pages 188-191 of 395
+
+================================================================================
+HIERARCHY
+================================================================================
+
+[Q0000] STRATEGIC INTEGRATION ADMIN (SIA)
+  Position ID: SENDPDIRB22N
+  Name: Sudhakar Ramaswamy
+  Title: Senior Deputy Director
+  Ref: 1D
+  │
+  ├── [Q1000] COMPLIANCE & DATA GOVERNANCE
+  │     Position ID: BUREAADMC78N
+  │     Name: Tony Weber
+  │     Title: State Bureau Admin.
+  │     Ref: 2EPB
+  │     │
+  │     ├── [Q1010] PRIVACY & COMPLIANCE SECTION
+  │     │     Position ID: STDDADM1N32N
+  │     │     Name: Kristen Cooper-Howard
+  │     │     Title: SAM
+  │     │     Ref: 3LY
+  │     │     │
+  │     │     ├── DEPSPL2R11N | Thomas Nighswander | Dept. Specialist
+  │     │     ├── DEPSPL2Q90N | Kaneesa Tooson | Dept. Specialist
+  │     │     ├── DEPSPL2S01N | Daniel Norberg | Dept. Specialist
+  │     │     ├── DEPSPL2S02N | Ilene Hogan | Dept. Specialist
+  │     │     ├── DEPTALTAJ39Y | Teresa Fratto | Dept. Analyst
+  │     │     └── GNOFASTEB36R | Julie Pollok | GOA
+  │     │
+  │     ├── [Q1100] SECURITY & DATA GOVERNANCE
+  │     │     Position ID: STDIVADMH92N
+  │     │     Name: James Bowen
+  │     │     Title: State Division Admin.
+  │     │     Ref: 3LX
+  │     │     │
+  │     │     ├── DEPSPL2K70N | Christina Engman | Dept. Specialist
+  │     │     ├── DEPSPL2R52N | Travena Green | Dept. Specialist
+  │     │     ├── DEPTALTAN61Y | Amal Ashabi | Dept. Analyst
+  │     │     │
+  │     │     ├── [Q1110] ACCESS MANAGEMENT SECTION
+  │     │     │     Position ID: STDDADM1R42N
+  │     │     │     Name: Timothy Kwast
+  │     │     │     Title: SAM
+  │     │     │     Ref: 4VD
+  │     │     │     │
+  │     │     │     ├── DEPTALTA659N | Felicia Price | Dept. Analyst
+  │     │     │     ├── DEPTTRER33N | Roger Winsor | Dept. Analyst
+  │     │     │     ├── DEPSPL2R10N | Joseph Shetenhelm | Dept. Specialist
+  │     │     │     ├── DEPTALTEG86Y | Tracy Spitzley | Dept. Analyst
+  │     │     │     ├── DEPSPL2T98N | Andrew Pioszak | Dept. Specialist
+  │     │     │     └── DEPTALTAJ42Y | Vacant | Dept. Analyst
+  │     │     │
+  │     │     └── [Q1120] DATA PROTECTION & MANAGEMENT SECTION
+  │     │           Position ID: STDDADM1U63N
+  │     │           Name: Laura Visser
+  │     │           Title: SAM
+  │     │           Ref: 4VE
+  │     │           │
+  │     │           ├── GNOFASTEB36R | Julie Pollok | GOA
+  │     │           ├── DEPSPL3E61N | David Golnick | Dept. Specialist
+  │     │           ├── DEPTALTAH93Y | Mackenzie Weston | Dept. Analyst
+  │     │           ├── DEPTALTAJ43Y | Ashley Sharp | Dept. Analyst
+  │     │           ├── DEPTALTAO26Y | Samantha McLean | Dept. Analyst
+  │     │           ├── DEPTALTEQ45Y | Bambi Burnham | Dept. Analyst
+  │     │           └── DEPTALTAN04Y | Angela Miller | Dept. Analyst
+  │
+  └── [Q2000] SIA BUSINESS INTEGRATION
+        Position ID: BUREAADMC17N
+        Name: Steve Schreier
+        Title: State Bureau Admin.
+        Ref: 2AJD
+        │
+        ├── STASTADMC09N | Chantele Geisenhaver | State Asst. Admin.
+        ├── SEMA3B42N | Michelle Cataline | SEMA
+        ├── STASTADMC30N | Christopher Lain | State Asst. Admin.
+        ├── STASTADMC43N | Laura Cleland | State Asst. Admin.
+        ├── STASTADMC53N | Melissa Potter | State Asst. Admin.
+        ├── STASTADMC58N | Megan Reetz | State Asst. Admin.
+        ├── STASTADMC45N | Elysse Christenson | State Asst. Admin.
+        ├── STASTADMC86N | Craig Henry | State Asst. Admin.
+        │
+        ├── [Q2100] SIA DELIVERY ADMINISTRATION
+        │     Position ID: STDIVADMG31N
+        │     Name: Danielle Lefere
+        │     Title: SDA
+        │     Ref: 3PD
+        │     │
+        │     └── DEPSPL2P11N | Danielle Green | Dept. Specialist
+        │
+        ├── [Q2110] SIA TESTING MANAGER
+        │     Position ID: STDDADM1M80N
+        │     Name: Holly Roderick
+        │     Title: State Admin Mngr
+        │     Ref: 4RJ
+        │     │
+        │     └── SIA User Acceptance Test Unit (Ref: 4RJ)
+        │           ├── DEPSPL2P25N | Lisa O'Berry | Dept. Specialist
+        │           ├── DEPSPL2O66N | Lyle Laudenslager | Dept. Specialist
+        │           ├── DEPSPL2Q14N | Jody L. Klink-Nichol | Dept. Specialist
+        │           ├── DEPSPL2O15N | Bryan Fairbairn | Dept. Specialist
+        │           ├── DEPSPL2Q05N | Brenton Stark | Dept. Specialist
+        │           ├── DEPSPL2M07N | Laura Dockham | Dept. Specialist
+        │           ├── DEPSPL2M94N | Addie M. Roof | Dept. Specialist
+        │           ├── DEPSPL2O39 | Ethan Gordon | Dept. Specialist
+        │           ├── DEPTALTA611N | Vacant | Dept. Analyst
+        │           ├── DEPTALTAI84Y | Guadalupe Cruz-Cisneros | Dept. Analyst
+        │           ├── DEPTALTEE68Y | Hussam Al-Odeh | Dept. Analyst
+        │           ├── DEPTALTEW57Y | Christine Ashkar | Dept. Analyst
+        │           ├── DEPTALTAF58Y | Jose Marin | Dept. Analyst
+        │           ├── DEPTALTAO65Y | Dawson Heath | Dept. Analyst
+        │           ├── DEPTALTER24Y | Linda Lewis | Dept. Analyst
+        │           ├── DEPSPL2H52N | Charles (Traci) Letney | Dept. Specialist
+        │           └── DEPTALTA931N | Vacant | Dept. Analyst
+        │
+        └── [Q2120] SIA STRATEGIC INTEGRATION SEC
+              Position ID: STDDADM1T18N
+              Name: Sean Hennika
+              Title: State Admin Mngr
+              Ref: 4VA
+              │
+              ├── DEPSPL2H52N | Charles (Traci) Letney | Dept. Specialist
+              ├── DEPTALTAO65Y | Dawson Heath | Dept. Analyst
+              ├── DEPTALTES91Y | Joanne DeHetre | Dept. Analyst
+              └── DEPTALTAF58Y | Jose Marin | Dept. Analyst
+
+
+================================================================================
+PAGE 191 — SEPARATE BRANCH (Chief Operating Officer)
+================================================================================
+
+[A3000] CHIEF OPERATING OFFICER
+  Position ID: SPLAEPTEEE34N
+  Name: David Knezek
+  Title: Chief Operating Officer
+  Ref: 1B
+  │
+  ├── SENMGEXCA87N* | Jeffery Wieferich | Senior Management Executive
+  │
+  └── [S1000] State Hospital Administration
+        Position ID: SENEXPSYA07N
+        Name: Dr. George Mellos*
+        Title: Senior Executive Psych Director
+        Ref: 1R
+        │
+        ├── SEMA3B66N | Tracy Crockett | SEMA
+        ├── PHYSICNAA35R | Catherine Reid | Physician
+        ├── DEPSPL3E39N | Vacant | Departmental Specialist
+        ├── DEPTALTAE68Y | Vacant | Dept. Analyst
+        ├── DEPTALTEW23Y | Abigail Wilcox | Dept. Analyst
+        ├── STUDASTET08N | Vacant | Student Assistant
+        ├── STASTADMC89N | Nicholas Norcross | State Asst. Admin. (Ref: 1R)
+        ├── STDIVADMG73N | Larry Scott | SDA (FRZ)
+        ├── STDDADM1M09N | Stephen Love | SAM 15 (FRZ)
+        │
+        ├── [S1010] RESOURCE SUPPORT & CUSTOMER SERVICE
+        │     Position ID: STDDADM1K94N
+        │     Name: Charlette Shaw
+        │     Title: SAM
+        │     Ref: 3GV
+        │     │
+        │     ├── DEPTALTA003N | (Not a vacancy) | Dept. Analyst
+        │     ├── CFP DEPTALTEX10Y | Kelly McFall | Dept. Analyst
+        │     ├── Caro DEPTALTA001N | Michelle Davis | Dept. Analyst
+        │     ├── Caro DEPTALTEZ33Y | Maria Newvine | Dept. Analyst
+        │     ├── Kalamazoo DEPTALTAA06Y | Brian Bayer | Dept. Analyst
+        │     ├── Kalamazoo DEPTALTES56Y | Brandon Hutchins | Dept. Analyst
+        │     └── Walter Reuther DEPTALTER50Y | Sahithi Bolisetty / Krystle Leppek | Dept. Analyst
+        │
+        ├── [S1020] Investigations Section
+        │     Position ID: STDDADM1R10N
+        │     Name: Steven Atwell
+        │     Title: SAM 15
+        │     Ref: 3MX
+        │     │
+        │     ├── DEPSPL2Q54N | Marta Baldysz | Departmental Specialist
+        │     ├── DEPTALTAL50Y | Misaki Naito | Dept. Analyst
+        │     ├── Caro DEPTALTAD72Y | Alex Samuel | Dept. Analyst
+        │     ├── Caro DEPTALTAD73Y | Nichole Feltman | Dept. Analyst
+        │     ├── CFP DEPTALTAD69Y | Michelle Knight-Atchison | Dept. Analyst
+        │     ├── CFP DEPTALTAD70Y | Kathleen Beaubien | Dept. Analyst
+        │     ├── CFP DEPTALTAD71Y | Sharyn Jeske | Dept. Analyst
+        │     ├── DEPTALTAD68Y | Rashanna Davis | Dept. Analyst
+        │     ├── Walter Reuther DEPTALTAD76Y | Maria Walters | Dept. Analyst
+        │     ├── Walter Reuther DEPTALTAD77Y | Jeffrey Allison | Dept. Analyst
+        │     ├── Kalamazoo DEPTALTAD74Y | Samantha Roberts | Dept. Analyst
+        │     └── Kalamazoo DEPTALTAD75Y | Shannon Wagoner | Dept. Analyst
+        │
+        └── (Also direct reports to S1000):
+              STDIVADMG73N | Larry Scott | SDA (FRZ)
+              STDDADM1M09N | Stephen Love | SAM 15 (FRZ)
+
+
+================================================================================
+NOTES
+================================================================================
+- FRZ = Frozen position
+- SAM = State Administrative Manager
+- SDA = State Division Administrator
+- GOA = (Government Operations Analyst or similar)
+- SEMA = State Emergency Management Administrator (or role code)
+- * = Denotes special designation
+- Locations noted for some staff: Caro, CFP, Kalamazoo, Walter Reuther
+- Vacant positions are explicitly noted
+- Ref codes (1D, 2EPB, etc.) = cross-reference connectors between org chart pages
